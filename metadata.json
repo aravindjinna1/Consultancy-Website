@@ -1,0 +1,6 @@
+{
+  "name": "PAR Careers & Visa Consultancy Services",
+  "description": "Enterprise Overseas Careers and Visa Consultancy Platform offering work visa, student visa, career guidance, and free counselling.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
