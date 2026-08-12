@@ -1,0 +1,325 @@
+import React, { useState } from 'react';
+import { Phone, Mail, MessageSquare, ShieldCheck, User as UserIcon, Lock, Menu, X, ChevronDown, GraduationCap, Briefcase, Globe, Award, HelpCircle } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+
+interface HeaderProps {
+  currentTab?: string;
+  activeTab?: string;
+  setCurrentTab?: (tab: string) => void;
+  onNavClick?: (tab: string) => void;
+  onOpenCounselling: () => void;
+  onOpenAdminLogin?: () => void;
+  onOpenUserAuth?: () => void;
+}
+
+export const Header: React.FC<HeaderProps> = ({
+  currentTab,
+  activeTab,
+  setCurrentTab,
+  onNavClick,
+  onOpenCounselling,
+  onOpenAdminLogin,
+  onOpenUserAuth
+}) => {
+  const { user, isAdmin, logout, setIsAuthModalOpen, setIsAdminModalOpen } = useAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [countriesDropdownOpen, setCountriesDropdownOpen] = useState(false);
+
+  const tab = activeTab || currentTab || 'home';
+
+  const countries = [
+    { id: 'germany', name: 'Germany', flag: '🇩🇪' },
+    { id: 'singapore', name: 'Singapore', flag: '🇸🇬' },
+    { id: 'australia', name: 'Australia', flag: '🇦🇺' },
+    { id: 'united-kingdom', name: 'United Kingdom', flag: '🇬🇧' },
+    { id: 'canada', name: 'Canada', flag: '🇨🇦' },
+    { id: 'united-states', name: 'United States', flag: '🇺🇸' },
+  ];
+
+  const handleNavClick = (newTab: string) => {
+    if (onNavClick) {
+      onNavClick(newTab);
+    } else if (setCurrentTab) {
+      setCurrentTab(newTab);
+    }
+    setMobileMenuOpen(false);
+    setCountriesDropdownOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  return (
+    <header className="w-full sticky top-0 z-40 bg-white shadow-sm border-b border-slate-100">
+      {/* Top Contact Bar */}
+      <div className="bg-slate-900 text-slate-200 text-xs py-2 px-4 sm:px-8 transition-colors">
+        <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
+          <div className="flex items-center space-x-6 flex-wrap gap-y-1">
+            <a
+              href="tel:+918106023616"
+              className="flex items-center space-x-1.5 hover:text-sky-400 transition-colors"
+              title="Call PAR CAREERS"
+            >
+              <Phone className="w-3.5 h-3.5 text-sky-400" />
+              <span>+91 8106023616</span>
+            </a>
+            <a
+              href="https://wa.me/918106023616?text=Hello%20PAR%20CAREERS%2C%20I%20would%20like%20to%20inquire%20about%20overseas%20visas"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center space-x-1.5 hover:text-emerald-400 transition-colors"
+              title="WhatsApp PAR CAREERS"
+            >
+              <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="font-medium">WhatsApp: +91 8106023616</span>
+            </a>
+            <a
+              href="mailto:aravindjinna1@gmail.com"
+              className="hidden md:flex items-center space-x-1.5 hover:text-sky-400 transition-colors"
+            >
+              <Mail className="w-3.5 h-3.5 text-slate-400" />
+              <span>aravindjinna1@gmail.com</span>
+            </a>
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={() => handleNavClick('trust-standard')}
+              className="hidden lg:flex items-center space-x-1 text-slate-300 hover:text-sky-300 transition-colors"
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-sky-400" />
+              <span className="font-semibold tracking-wide">Trust Standard</span>
+            </button>
+
+            {user ? (
+              <div className="flex items-center space-x-3">
+                <button
+                  onClick={() => handleNavClick(isAdmin ? 'admin-dashboard' : 'user-dashboard')}
+                  className="flex items-center space-x-1 text-sky-300 font-medium hover:underline"
+                >
+                  <UserIcon className="w-3.5 h-3.5" />
+                  <span>{user.name.split(' ')[0]} ({isAdmin ? 'Admin' : 'Dashboard'})</span>
+                </button>
+                <button
+                  onClick={logout}
+                  className="text-slate-400 hover:text-red-400 text-xs transition-colors"
+                >
+                  Sign Out
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center space-x-3">
+                <button
+                  onClick={() => setIsAuthModalOpen(true)}
+                  className="hover:text-white transition-colors"
+                >
+                  Login / Signup
+                </button>
+                {/* Discrete Admin verification door for direct authorization */}
+                <button
+                  onClick={() => setIsAdminModalOpen(true)}
+                  className="text-slate-500 hover:text-slate-300 transition-colors p-1"
+                  title="Staff Portal Verification"
+                >
+                  <Lock className="w-3 h-3" />
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Main Sticky Navigation Bar */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 py-3 flex justify-between items-center gap-4">
+        {/* Brand Logo */}
+        <div
+          onClick={() => handleNavClick('home')}
+          className="cursor-pointer flex items-center space-x-2.5 group flex-shrink-0"
+        >
+          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-900 via-blue-800 to-sky-600 flex items-center justify-center text-white font-black text-lg shadow-md group-hover:scale-105 transition-transform">
+            P
+          </div>
+          <div className="whitespace-nowrap">
+            <div className="font-extrabold text-base sm:text-lg text-slate-900 leading-tight tracking-tight group-hover:text-blue-900 transition-colors">
+              PAR CAREERS
+            </div>
+            <div className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-sky-700">
+              & Visa Consultancy Services
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop Navigation Links */}
+        <nav className="hidden lg:flex items-center space-x-3 xl:space-x-5 text-xs xl:text-sm font-medium text-slate-700 whitespace-nowrap">
+          <button
+            onClick={() => handleNavClick('home')}
+            className={`transition-colors py-1 ${tab === 'home' ? 'text-blue-700 font-bold border-b-2 border-blue-700' : 'hover:text-blue-700'}`}
+          >
+            Home
+          </button>
+          <button
+            onClick={() => handleNavClick('work-visa')}
+            className={`transition-colors py-1 ${tab === 'work-visa' ? 'text-blue-700 font-bold border-b-2 border-blue-700' : 'hover:text-blue-700'}`}
+          >
+            Work Visa
+          </button>
+          <button
+            onClick={() => handleNavClick('student-visa')}
+            className={`transition-colors py-1 ${tab === 'student-visa' ? 'text-blue-700 font-bold border-b-2 border-blue-700' : 'hover:text-blue-700'}`}
+          >
+            Student Visa
+          </button>
+          <button
+            onClick={() => handleNavClick('careers')}
+            className={`transition-colors py-1 flex items-center space-x-1 ${tab === 'careers' ? 'text-blue-700 font-bold border-b-2 border-blue-700' : 'hover:text-blue-700'}`}
+          >
+            <span>Careers Abroad</span>
+            <span className="bg-sky-100 text-sky-800 text-[9px] px-1.5 py-0.5 rounded font-bold uppercase">Jobs</span>
+          </button>
+
+          {/* Countries Dropdown */}
+          <div className="relative group">
+            <button
+              onClick={() => setCountriesDropdownOpen(!countriesDropdownOpen)}
+              className={`flex items-center space-x-1 transition-colors py-1 ${(tab && tab.startsWith('country-')) || tab === 'countries' ? 'text-blue-700 font-bold' : 'hover:text-blue-700'}`}
+            >
+              <span>Countries</span>
+              <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:rotate-180 transition-transform" />
+            </button>
+            <div className="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-xl border border-slate-100 py-2 hidden group-hover:block z-50 animate-fadeIn">
+              <button
+                onClick={() => handleNavClick('countries')}
+                className="w-full text-left px-4 py-2 text-xs font-bold text-sky-700 hover:bg-slate-50 border-b border-slate-100 uppercase tracking-wider"
+              >
+                All Destinations →
+              </button>
+              {countries.map(c => (
+                <button
+                  key={c.id}
+                  onClick={() => handleNavClick(`country-${c.id}`)}
+                  className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-700 flex items-center space-x-2 transition-colors"
+                >
+                  <span className="text-base">{c.flag}</span>
+                  <span>{c.name}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <button
+            onClick={() => handleNavClick('trust-standard')}
+            className={`transition-colors py-1 ${tab === 'trust-standard' ? 'text-blue-700 font-bold border-b-2 border-blue-700' : 'hover:text-blue-700'}`}
+          >
+            Trust Standard
+          </button>
+          <button
+            onClick={() => handleNavClick('about')}
+            className={`transition-colors py-1 ${tab === 'about' ? 'text-blue-700 font-bold border-b-2 border-blue-700' : 'hover:text-blue-700'}`}
+          >
+            About Us
+          </button>
+          <button
+            onClick={() => handleNavClick('contact')}
+            className={`transition-colors py-1 ${tab === 'contact' ? 'text-blue-700 font-bold border-b-2 border-blue-700' : 'hover:text-blue-700'}`}
+          >
+            Contact
+          </button>
+        </nav>
+
+        {/* Action Button & Mobile Menu Toggle */}
+        <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+          <button
+            onClick={onOpenCounselling}
+            className="bg-gradient-to-r from-blue-700 to-sky-600 hover:from-blue-800 hover:to-sky-700 text-white font-semibold text-xs sm:text-sm px-3.5 sm:px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center space-x-1 whitespace-nowrap"
+          >
+            <span>Get Free Counselling</span>
+          </button>
+
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="lg:hidden p-2 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
+            aria-label="Toggle Navigation Menu"
+          >
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu Dropdown */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden bg-white border-t border-slate-100 px-6 py-4 space-y-3 animate-fadeIn shadow-xl">
+          <div className="grid grid-cols-2 gap-2 text-sm font-medium text-slate-700 pb-2 border-b border-slate-100">
+            <button
+              onClick={() => handleNavClick('home')}
+              className={`text-left py-2 px-3 rounded-lg ${tab === 'home' ? 'bg-blue-50 text-blue-700 font-bold' : 'hover:bg-slate-50'}`}
+            >
+              Home
+            </button>
+            <button
+              onClick={() => handleNavClick('work-visa')}
+              className={`text-left py-2 px-3 rounded-lg ${tab === 'work-visa' ? 'bg-blue-50 text-blue-700 font-bold' : 'hover:bg-slate-50'}`}
+            >
+              Work Visa
+            </button>
+            <button
+              onClick={() => handleNavClick('student-visa')}
+              className={`text-left py-2 px-3 rounded-lg ${tab === 'student-visa' ? 'bg-blue-50 text-blue-700 font-bold' : 'hover:bg-slate-50'}`}
+            >
+              Student Visa
+            </button>
+            <button
+              onClick={() => handleNavClick('careers')}
+              className={`text-left py-2 px-3 rounded-lg ${tab === 'careers' ? 'bg-blue-50 text-blue-700 font-bold' : 'hover:bg-slate-50'}`}
+            >
+              Careers Abroad
+            </button>
+            <button
+              onClick={() => handleNavClick('countries')}
+              className={`text-left py-2 px-3 rounded-lg ${tab === 'countries' ? 'bg-blue-50 text-blue-700 font-bold' : 'hover:bg-slate-50'}`}
+            >
+              All Countries
+            </button>
+            <button
+              onClick={() => handleNavClick('trust-standard')}
+              className={`text-left py-2 px-3 rounded-lg ${tab === 'trust-standard' ? 'bg-blue-50 text-blue-700 font-bold' : 'hover:bg-slate-50'}`}
+            >
+              Trust Standard
+            </button>
+            <button
+              onClick={() => handleNavClick('about')}
+              className={`text-left py-2 px-3 rounded-lg ${tab === 'about' ? 'bg-blue-50 text-blue-700 font-bold' : 'hover:bg-slate-50'}`}
+            >
+              About Us
+            </button>
+            <button
+              onClick={() => handleNavClick('contact')}
+              className={`text-left py-2 px-3 rounded-lg ${tab === 'contact' ? 'bg-blue-50 text-blue-700 font-bold' : 'hover:bg-slate-50'}`}
+            >
+              Contact Us
+            </button>
+            <button
+              onClick={() => handleNavClick('blogs')}
+              className={`text-left py-2 px-3 rounded-lg ${tab === 'blogs' ? 'bg-blue-50 text-blue-700 font-bold' : 'hover:bg-slate-50'}`}
+            >
+              Blogs & News
+            </button>
+          </div>
+
+          <div>
+            <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Destinations</div>
+            <div className="grid grid-cols-2 gap-1.5">
+              {countries.map(c => (
+                <button
+                  key={c.id}
+                  onClick={() => handleNavClick(`country-${c.id}`)}
+                  className="flex items-center space-x-2 text-xs text-slate-700 p-2 rounded-lg hover:bg-slate-100"
+                >
+                  <span>{c.flag}</span>
+                  <span>{c.name}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </header>
+  );
+};
