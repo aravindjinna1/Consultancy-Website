@@ -11,7 +11,6 @@ import { HomePage } from './pages/HomePage';
 import { WorkVisaPage } from './pages/WorkVisaPage';
 import { StudentVisaPage } from './pages/StudentVisaPage';
 import { CareersAbroadPage } from './pages/CareersAbroadPage';
-import { ReferralsPage } from './pages/ReferralsPage';
 import { CountriesHubPage } from './pages/CountriesHubPage';
 import { CountryDetailPage } from './pages/CountryDetailPage';
 import { TrustStandardPage } from './pages/TrustStandardPage';
@@ -98,10 +97,6 @@ export function App() {
           onOpenCounselling={handleOpenCounselling}
         />
       );
-    }
-
-    if (activeTab === 'referrals') {
-      return <ReferralsPage />;
     }
 
     if (activeTab === 'countries') {

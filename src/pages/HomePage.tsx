@@ -81,61 +81,49 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavClick, onOpenCounsellin
             </div>
           </div>
 
-          {/* Hero Right Card / Quick Search Widget */}
-          <div className="lg:col-span-5">
-            <div className="bg-slate-800/90 border border-slate-700 p-6 sm:p-8 rounded-2xl shadow-2xl backdrop-blur-md space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-700 pb-3">
-                <h3 className="font-bold text-white text-base flex items-center space-x-2">
-                  <Globe className="w-5 h-5 text-sky-400" />
-                  <span>Find Overseas Opportunities</span>
-                </h3>
-                <span className="text-[11px] bg-blue-900/60 text-sky-300 px-2 py-0.5 rounded font-semibold">Live 2026</span>
+          {/* Hero Right Student Studying Visual */}
+          <div className="lg:col-span-5 relative">
+            <div className="relative rounded-2xl overflow-hidden border border-slate-700/60 shadow-2xl group bg-slate-800">
+              <img
+                src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80"
+                alt="Student studying on laptop for overseas university admissions & visas"
+                className="w-full h-[380px] sm:h-[440px] object-cover group-hover:scale-105 transition-transform duration-700"
+                referrerPolicy="no-referrer"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
+
+              {/* Floating Badge 1 - Top Right */}
+              <div className="absolute top-4 right-4 bg-slate-900/90 backdrop-blur-md border border-slate-700/80 rounded-xl p-3 shadow-lg flex items-center space-x-2.5">
+                <div className="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-lg">
+                  🎓
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-white">Global University Admissions</div>
+                  <div className="text-[10px] text-sky-300 font-medium">Germany, UK, Aus, USA & SG</div>
+                </div>
               </div>
 
-              <div className="space-y-3">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">Target Country</label>
-                  <select
-                    value={selectedCountryFilter}
-                    onChange={(e) => setSelectedCountryFilter(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-sky-500"
-                  >
-                    <option value="All">All Top Destinations</option>
-                    <option value="Germany">🇩🇪 Germany (Chancenkarte / Blue Card)</option>
-                    <option value="Singapore">🇸🇬 Singapore (EP / S Pass)</option>
-                    <option value="Australia">🇦🇺 Australia (PR / 482)</option>
-                    <option value="United Kingdom">🇬🇧 United Kingdom (Skilled Worker)</option>
-                    <option value="Canada">🇨🇦 Canada (Express Entry / PNP)</option>
-                    <option value="United States">🇺🇸 United States (H-1B / STEM OPT)</option>
-                  </select>
+              {/* Floating Badge 2 - Bottom Banner */}
+              <div className="absolute bottom-4 left-4 right-4 bg-slate-900/90 backdrop-blur-md border border-slate-700/80 rounded-xl p-4 shadow-xl space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-emerald-400 flex items-center space-x-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                    <span>Certified Overseas Education & Visa Advisory</span>
+                  </span>
+                  <span className="text-[10px] bg-sky-500/20 text-sky-300 px-2 py-0.5 rounded font-bold uppercase">100% Free Consultation</span>
                 </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">Keyword / Skill Search</label>
-                  <div className="relative">
-                    <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
-                    <input
-                      type="text"
-                      placeholder="e.g. Engineer, Nurse, Software, Germany"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500"
-                    />
-                  </div>
-                </div>
-
-                <div className="pt-2">
+                <p className="text-xs text-slate-300 leading-snug">
+                  Expert assistance for university shortlisting, SOP crafting, tuition-free public universities in Germany, and visa processing.
+                </p>
+                <div className="pt-1 flex items-center justify-between text-xs">
+                  <span className="text-slate-400 text-[11px]">Direct Support: <a href="tel:+918106023616" className="text-sky-300 font-bold underline">+91 8106023616</a></span>
                   <button
-                    onClick={() => onNavClick('careers')}
-                    className="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold text-sm py-2.5 rounded-lg transition-colors flex items-center justify-center space-x-2"
+                    onClick={() => onNavClick('student-visa')}
+                    className="bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs px-3 py-1.5 rounded-lg transition-colors flex items-center space-x-1"
                   >
-                    <span>Search {filteredJobs.length} Live Openings</span>
-                    <ArrowRight className="w-4 h-4" />
+                    <span>Student Visa Guide</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </button>
-                </div>
-
-                <div className="text-[11px] text-slate-400 text-center pt-1">
-                  📞 Urgent Query? Call <a href="tel:+918106023616" className="text-sky-300 font-bold underline">+91 8106023616</a>
                 </div>
               </div>
             </div>
@@ -154,7 +142,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavClick, onOpenCounsellin
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Work Visa */}
           <div className="bg-white p-6 rounded-2xl border border-slate-200 hover:border-blue-500 shadow-sm hover:shadow-lg transition-all group flex flex-col justify-between">
             <div className="space-y-4">
@@ -216,28 +204,6 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavClick, onOpenCounsellin
                 className="text-blue-700 font-bold text-xs hover:text-blue-900 flex items-center space-x-1"
               >
                 <span>View Job Openings</span>
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-
-          {/* Referrals */}
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 hover:border-blue-500 shadow-sm hover:shadow-lg transition-all group flex flex-col justify-between">
-            <div className="space-y-4">
-              <div className="w-12 h-12 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition-colors">
-                <Users className="w-6 h-6" />
-              </div>
-              <h3 className="font-bold text-lg text-slate-900">Refer & Earn Program</h3>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Refer friends or colleagues seeking overseas opportunities. Earn rewards while helping others achieve global career success.
-              </p>
-            </div>
-            <div className="pt-6 border-t border-slate-100 mt-4">
-              <button
-                onClick={() => onNavClick('referrals')}
-                className="text-blue-700 font-bold text-xs hover:text-blue-900 flex items-center space-x-1"
-              >
-                <span>Refer Candidate Now</span>
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>

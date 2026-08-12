@@ -115,7 +115,6 @@ export const ContactPage: React.FC = () => {
                     <option value="Work Visa Inquiry">Work Visa Inquiry</option>
                     <option value="Student Admission & Visa">Student Admission & Visa</option>
                     <option value="Overseas Career Job Opening">Overseas Career Job Opening</option>
-                    <option value="Candidate Referral Scheme">Candidate Referral Scheme</option>
                     <option value="General Inquiry">General Inquiry</option>
                   </select>
                 </div>

@@ -84,11 +84,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavClick }) => {
                 </button>
               </li>
               <li>
-                <button onClick={() => onNavClick('referrals')} className="hover:text-white transition-colors">
-                  Refer & Earn Scheme
-                </button>
-              </li>
-              <li>
                 <button onClick={() => onNavClick('trust-standard')} className="hover:text-white transition-colors text-sky-400 font-medium">
                   Our 5 Trust Promises
                 </button>
