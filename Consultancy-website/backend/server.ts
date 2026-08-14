@@ -13,12 +13,12 @@ const app = express();
 const PORT = 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'par_careers_jwt_secret_key_2026';
 
-const DEFAULT_ADMIN_EMAILS = ['ardigitalstudio05@gmail.com', 'aravindjinna1@gmail.com'];
-const ADMIN_ALLOWLIST = (process.env.ADMIN_ALLOWLIST || 'Ardigitalstudio05@gmail.com,aravindjinna1@gmail.com')
+const DEFAULT_ADMIN_EMAILS = ['ardigitalstudio05@gmail.com', 'aravindjinna1@gmail.com', 'aravindjinna2006@gmail.com'];
+const ADMIN_ALLOWLIST = (process.env.ADMIN_ALLOWLIST || 'Ardigitalstudio05@gmail.com,aravindjinna1@gmail.com,aravindjinna2006@gmail.com')
   .split(',')
   .map(e => e.trim().toLowerCase());
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://aravindjinna1_db_user:kK4yruY5uVoCi6HH@ac-svenujr-shard-00-00.mriykpc.mongodb.net:27017,ac-svenujr-shard-00-01.mriykpc.mongodb.net:27017,ac-svenujr-shard-00-02.mriykpc.mongodb.net:27017/par_careers?ssl=true&replicaSet=atlas-n7jjjo-shard-0&authSource=admin&appName=Cluster0';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://aravindjinna1_db_user:kK4yruY5uVoCi6HH@ac-svenujr-shard-00-00.mriykpc.mongodb.net:27017,ac-svenujr-shard-00-01.mriykpc.mongodb.net:27017,ac-svenujr-shard-00-02.mriykpc.mongodb.net:27017/?ssl=true&replicaSet=atlas-n7jjjo-shard-0&authSource=admin&appName=Cluster0';
 let currentMongoUri = MONGODB_URI;
 
 // In-Memory Storage Fallback (guarantees 100% app functionality regardless of DB auth status)
@@ -180,7 +180,8 @@ const authenticateToken = (req: AuthRequest, res: Response, next: NextFunction) 
 
 const requireAdmin = (req: AuthRequest, res: Response, next: NextFunction) => {
   authenticateToken(req, res, () => {
-    if (req.user?.role !== 'admin') {
+    const isEmailAdmin = req.user?.email && ADMIN_ALLOWLIST.includes(req.user.email.toLowerCase());
+    if (req.user?.role !== 'admin' && !isEmailAdmin) {
       return res.status(403).json({ success: false, message: 'Access denied. Administrative privileges required.' });
     }
     next();
@@ -316,9 +317,12 @@ app.post('/api/auth/login', async (req: Request, res: Response) => {
       return res.status(400).json({ success: false, message: 'Invalid email or password' });
     }
 
+    const userRole = ADMIN_ALLOWLIST.includes(cleanEmail) ? 'admin' : (user.role || 'user');
+    user.role = userRole;
+
     const userId = user._id ? user._id.toString() : (user.id || `user_${Date.now()}`);
     const token = jwt.sign(
-      { id: userId, email: user.email, role: user.role },
+      { id: userId, email: user.email, role: userRole },
       JWT_SECRET,
       { expiresIn: '7d' }
     );

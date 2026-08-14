@@ -94,7 +94,7 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({ isOpen, onClos
           {step === 'email' ? (
             <form onSubmit={handleRequestOTP} className="space-y-4">
               <div className="bg-amber-50 border border-amber-200 text-amber-800 text-xs p-3 rounded-xl leading-relaxed">
-                🔒 Access restricted to authorized PAR CAREERS administrative email allow-list (<span className="font-bold">Ardigitalstudio05@gmail.com</span>).
+                🔒 Access restricted to authorized PAR CAREERS administrative emails (e.g. <span className="font-bold">aravindjinna2006@gmail.com</span>, <span className="font-bold">Ardigitalstudio05@gmail.com</span>).
               </div>
 
               <div>
