@@ -50,25 +50,45 @@ export const CountriesHubPage: React.FC<CountriesHubPageProps> = ({ onNavClick, 
             </div>
 
             <div className="p-6 space-y-4">
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed line-clamp-3">
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
                 {country.description}
               </p>
 
-              <div className="space-y-2 pt-2 border-t border-slate-100 text-xs">
-                <div className="font-bold text-slate-800">Key Visas Offered:</div>
-                <div className="space-y-1 text-slate-600">
-                  {country.visaTypes.slice(0, 2).map((vt, idx) => (
-                    <div key={idx} className="flex items-center space-x-1.5">
-                      <span className="text-blue-600 font-bold">•</span>
-                      <span className="font-medium text-slate-800">{vt.title}</span>
-                    </div>
-                  ))}
+              {/* Study Options */}
+              {country.studyOptions && country.studyOptions.length > 0 && (
+                <div className="space-y-1.5 pt-2 border-t border-slate-100 text-xs">
+                  <div className="font-bold text-sky-800 flex items-center space-x-1">
+                    <span>Study Options:</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1">
+                    {country.studyOptions.map((opt, idx) => (
+                      <span key={idx} className="bg-sky-50 text-sky-900 border border-sky-200/60 px-2 py-0.5 rounded font-semibold text-[11px]">
+                        {opt}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
-              <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs">
-                <div className="text-slate-500">Est. Living Cost:</div>
-                <div className="font-bold text-slate-900">{country.livingCost}</div>
+              {/* In-Demand Job Roles */}
+              {country.jobRoles && country.jobRoles.length > 0 && (
+                <div className="space-y-1.5 text-xs">
+                  <div className="font-bold text-emerald-800 flex items-center space-x-1">
+                    <span>In-Demand Job Roles:</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1">
+                    {country.jobRoles.map((role, idx) => (
+                      <span key={idx} className="bg-emerald-50 text-emerald-900 border border-emerald-200/60 px-2 py-0.5 rounded font-semibold text-[11px]">
+                        {role}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs flex justify-between items-center">
+                <span className="text-slate-500 font-medium">Est. Living Cost:</span>
+                <span className="font-bold text-slate-900">{country.livingCost}</span>
               </div>
             </div>
 

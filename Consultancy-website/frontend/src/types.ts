@@ -118,6 +118,8 @@ export interface CountryInfo {
   flag: string;
   coverImage: string;
   description: string;
+  studyOptions?: string[];
+  jobRoles?: string[];
   benefits: string[];
   visaTypes: { title: string; description: string; duration: string }[];
   eligibility: string[];

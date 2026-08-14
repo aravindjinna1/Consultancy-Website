@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Phone, Mail, MessageSquare, MapPin, Send, CheckCircle2, AlertCircle, Loader2, Clock } from 'lucide-react';
+import { Phone, Mail, MessageSquare, MapPin, Send, CheckCircle2, AlertCircle, Loader2, Clock, Instagram, Linkedin } from 'lucide-react';
 import { submitContactForm } from '../services/api';
 
 export const ContactPage: React.FC = () => {
@@ -51,7 +51,7 @@ export const ContactPage: React.FC = () => {
               <CheckCircle2 className="w-12 h-12 text-emerald-600 mx-auto" />
               <h3 className="font-bold text-lg text-slate-900">Message Delivered!</h3>
               <p className="text-slate-600 text-xs sm:text-sm">
-                Your inquiry has been sent to our desk (<strong className="text-blue-700">aravindjinna1@gmail.com</strong>). We will respond within 24 business hours.
+                Your inquiry has been sent to our desk (<strong className="text-blue-700">Ardigitalstudio05@gmail.com</strong>). We will respond within 24 business hours.
               </p>
               <button
                 onClick={() => setSuccess(false)}
@@ -98,7 +98,7 @@ export const ContactPage: React.FC = () => {
                   <label className="block text-xs font-semibold text-slate-700 mb-1">Phone Number</label>
                   <input
                     type="tel"
-                    placeholder="+91 8106023616"
+                    placeholder="+91 95331 20230"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-600"
@@ -150,27 +150,27 @@ export const ContactPage: React.FC = () => {
             <h3 className="font-bold text-lg text-white border-b border-slate-800 pb-2">Direct Contact Details</h3>
 
             <div className="space-y-3 text-sm text-slate-300">
-              <a href="tel:+918106023616" className="flex items-start space-x-3 hover:text-sky-400 transition-colors">
+              <a href="tel:+919533120230" className="flex items-start space-x-3 hover:text-sky-400 transition-colors">
                 <Phone className="w-5 h-5 text-sky-400 flex-shrink-0 mt-0.5" />
                 <div>
                   <div className="text-xs text-slate-400">Phone Consultation:</div>
-                  <div className="font-bold text-white text-base">+91 8106023616</div>
+                  <div className="font-bold text-white text-base">+91 95331 20230</div>
                 </div>
               </a>
 
-              <a href="https://wa.me/918106023616" target="_blank" rel="noopener noreferrer" className="flex items-start space-x-3 hover:text-emerald-400 transition-colors">
+              <a href="https://wa.me/919533120230" target="_blank" rel="noopener noreferrer" className="flex items-start space-x-3 hover:text-emerald-400 transition-colors">
                 <MessageSquare className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
                 <div>
                   <div className="text-xs text-slate-400">WhatsApp Desk:</div>
-                  <div className="font-bold text-emerald-400 text-base">+91 8106023616</div>
+                  <div className="font-bold text-emerald-400 text-base">+91 95331 20230</div>
                 </div>
               </a>
 
-              <a href="mailto:aravindjinna1@gmail.com" className="flex items-start space-x-3 hover:text-sky-400 transition-colors">
+              <a href="mailto:Ardigitalstudio05@gmail.com" className="flex items-start space-x-3 hover:text-sky-400 transition-colors">
                 <Mail className="w-5 h-5 text-sky-400 flex-shrink-0 mt-0.5" />
                 <div>
                   <div className="text-xs text-slate-400">Official Desk Email:</div>
-                  <div className="font-bold text-white text-sm">aravindjinna1@gmail.com</div>
+                  <div className="font-bold text-white text-sm">Ardigitalstudio05@gmail.com</div>
                 </div>
               </a>
 
@@ -180,6 +180,40 @@ export const ContactPage: React.FC = () => {
                   <div className="text-xs text-slate-400">Office Working Hours:</div>
                   <div className="font-medium text-white text-xs">Monday – Saturday: 9:30 AM – 7:00 PM IST</div>
                 </div>
+              </div>
+            </div>
+
+            {/* Social Channels */}
+            <div className="pt-4 border-t border-slate-800">
+              <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Connect via Social Media</div>
+              <div className="grid grid-cols-3 gap-2">
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-slate-800 hover:bg-slate-700 text-slate-200 p-2.5 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 transition-colors"
+                >
+                  <Instagram className="w-4 h-4 text-pink-400" />
+                  <span>Instagram</span>
+                </a>
+                <a
+                  href="https://linkedin.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-slate-800 hover:bg-slate-700 text-slate-200 p-2.5 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 transition-colors"
+                >
+                  <Linkedin className="w-4 h-4 text-sky-400" />
+                  <span>LinkedIn</span>
+                </a>
+                <a
+                  href="https://wa.me/919533120230"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-slate-800 hover:bg-slate-700 text-slate-200 p-2.5 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 transition-colors"
+                >
+                  <MessageSquare className="w-4 h-4 text-emerald-400" />
+                  <span>WhatsApp</span>
+                </a>
               </div>
             </div>
           </div>

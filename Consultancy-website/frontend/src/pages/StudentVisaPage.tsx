@@ -33,37 +33,185 @@ export const StudentVisaPage: React.FC<StudentVisaPageProps> = ({ onNavClick, on
       </div>
 
       {/* Country Comparison Cards for Students */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
-          <div className="text-2xl">🇩🇪 Germany</div>
-          <h3 className="font-bold text-lg text-slate-900">Tuition-Free Public Universities</h3>
-          <p className="text-slate-600 text-xs sm:text-sm">
-            €0 tuition fees at top public universities + 18-month stay-back work permit.
-          </p>
-          <div className="text-xs text-sky-700 font-semibold bg-sky-50 p-2 rounded">
-            Blocked Account ~€11,208/yr required
-          </div>
+      <div className="space-y-4">
+        <div className="text-center max-w-2xl mx-auto space-y-1">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">Featured Study Abroad Destinations</h2>
+          <p className="text-slate-500 text-xs sm:text-sm">Explore specialized course options, study permits, and stay-back work rights across our primary partner destinations.</p>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
-          <div className="text-2xl">🇬🇧 United Kingdom</div>
-          <h3 className="font-bold text-lg text-slate-900">1-Year Master Programs</h3>
-          <p className="text-slate-600 text-xs sm:text-sm">
-            Fast 1-year Master degrees + 2-Year unsponsored Graduate Route work visa.
-          </p>
-          <div className="text-xs text-sky-700 font-semibold bg-sky-50 p-2 rounded">
-            Scholarships up to £5,000 available
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* UK */}
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 hover:border-blue-500 shadow-sm space-y-3 flex flex-col justify-between">
+            <div className="space-y-2.5">
+              <div className="flex justify-between items-center">
+                <span className="text-2xl">🇬🇧 UK</span>
+                <span className="text-[11px] bg-blue-50 text-blue-800 font-bold px-2 py-0.5 rounded">2-Yr Graduate Route</span>
+              </div>
+              <h3 className="font-bold text-base text-slate-900">United Kingdom</h3>
+              <div className="space-y-1 text-xs">
+                <span className="font-bold text-sky-800 block">Popular Study Courses:</span>
+                <div className="flex flex-wrap gap-1">
+                  <span className="bg-sky-50 text-sky-900 px-2 py-0.5 rounded font-medium text-[11px]">Hotel Management</span>
+                  <span className="bg-sky-50 text-sky-900 px-2 py-0.5 rounded font-medium text-[11px]">IT</span>
+                  <span className="bg-sky-50 text-sky-900 px-2 py-0.5 rounded font-medium text-[11px]">B.Sc Nursing</span>
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={() => onOpenCounselling('Student Visa', 'United Kingdom')}
+              className="w-full mt-2 bg-slate-900 hover:bg-blue-700 text-white font-bold text-xs py-2 rounded-lg transition-colors"
+            >
+              Apply for UK Intake
+            </button>
           </div>
-        </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
-          <div className="text-2xl">🇦🇺 Australia</div>
-          <h3 className="font-bold text-lg text-slate-900">Extended Post-Study Rights</h3>
-          <p className="text-slate-600 text-xs sm:text-sm">
-            Up to 4-6 years work permit for graduates in regional university campuses.
-          </p>
-          <div className="text-xs text-sky-700 font-semibold bg-sky-50 p-2 rounded">
-            Subclass 500 Student Visa + Part-Time Work
+          {/* Russia */}
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 hover:border-blue-500 shadow-sm space-y-3 flex flex-col justify-between">
+            <div className="space-y-2.5">
+              <div className="flex justify-between items-center">
+                <span className="text-2xl">🇷🇺 Russia</span>
+                <span className="text-[11px] bg-blue-50 text-blue-800 font-bold px-2 py-0.5 rounded">Affordable Fees</span>
+              </div>
+              <h3 className="font-bold text-base text-slate-900">Russia</h3>
+              <div className="space-y-1 text-xs">
+                <span className="font-bold text-sky-800 block">Popular Study Courses:</span>
+                <div className="flex flex-wrap gap-1">
+                  <span className="bg-sky-50 text-sky-900 px-2 py-0.5 rounded font-medium text-[11px]">Nursing</span>
+                  <span className="bg-sky-50 text-sky-900 px-2 py-0.5 rounded font-medium text-[11px]">Hotel Management</span>
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={() => onOpenCounselling('Student Visa', 'Russia')}
+              className="w-full mt-2 bg-slate-900 hover:bg-blue-700 text-white font-bold text-xs py-2 rounded-lg transition-colors"
+            >
+              Apply for Russia Intake
+            </button>
+          </div>
+
+          {/* Germany */}
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 hover:border-blue-500 shadow-sm space-y-3 flex flex-col justify-between">
+            <div className="space-y-2.5">
+              <div className="flex justify-between items-center">
+                <span className="text-2xl">🇩🇪 Germany</span>
+                <span className="text-[11px] bg-emerald-50 text-emerald-800 font-bold px-2 py-0.5 rounded">€0 Tuition Fees</span>
+              </div>
+              <h3 className="font-bold text-base text-slate-900">Germany</h3>
+              <div className="space-y-1 text-xs">
+                <span className="font-bold text-sky-800 block">Popular Study Courses:</span>
+                <div className="flex flex-wrap gap-1">
+                  <span className="bg-sky-50 text-sky-900 px-2 py-0.5 rounded font-medium text-[11px]">Doctors</span>
+                  <span className="bg-sky-50 text-sky-900 px-2 py-0.5 rounded font-medium text-[11px]">Nursing</span>
+                  <span className="bg-sky-50 text-sky-900 px-2 py-0.5 rounded font-medium text-[11px]">Aeronautical Engineering</span>
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={() => onOpenCounselling('Student Visa', 'Germany')}
+              className="w-full mt-2 bg-slate-900 hover:bg-blue-700 text-white font-bold text-xs py-2 rounded-lg transition-colors"
+            >
+              Apply for Germany Intake
+            </button>
+          </div>
+
+          {/* Singapore */}
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 hover:border-blue-500 shadow-sm space-y-3 flex flex-col justify-between">
+            <div className="space-y-2.5">
+              <div className="flex justify-between items-center">
+                <span className="text-2xl">🇸🇬 Singapore</span>
+                <span className="text-[11px] bg-blue-50 text-blue-800 font-bold px-2 py-0.5 rounded">Top Asian Hub</span>
+              </div>
+              <h3 className="font-bold text-base text-slate-900">Singapore</h3>
+              <div className="space-y-1 text-xs">
+                <span className="font-bold text-sky-800 block">Popular Study Courses:</span>
+                <div className="flex flex-wrap gap-1">
+                  <span className="bg-sky-50 text-sky-900 px-2 py-0.5 rounded font-medium text-[11px]">B.Sc Nursing</span>
+                  <span className="bg-sky-50 text-sky-900 px-2 py-0.5 rounded font-medium text-[11px]">ANM / GNM</span>
+                  <span className="bg-sky-50 text-sky-900 px-2 py-0.5 rounded font-medium text-[11px]">IT</span>
+                  <span className="bg-sky-50 text-sky-900 px-2 py-0.5 rounded font-medium text-[11px]">Hotel Management</span>
+                  <span className="bg-sky-50 text-sky-900 px-2 py-0.5 rounded font-medium text-[11px]">Mechanical Engineering</span>
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={() => onOpenCounselling('Student Visa', 'Singapore')}
+              className="w-full mt-2 bg-slate-900 hover:bg-blue-700 text-white font-bold text-xs py-2 rounded-lg transition-colors"
+            >
+              Apply for Singapore Intake
+            </button>
+          </div>
+
+          {/* Australia */}
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 hover:border-blue-500 shadow-sm space-y-3 flex flex-col justify-between">
+            <div className="space-y-2.5">
+              <div className="flex justify-between items-center">
+                <span className="text-2xl">🇦🇺 Australia</span>
+                <span className="text-[11px] bg-blue-50 text-blue-800 font-bold px-2 py-0.5 rounded">4-6 Yr Stay-Back</span>
+              </div>
+              <h3 className="font-bold text-base text-slate-900">Australia</h3>
+              <div className="space-y-1 text-xs">
+                <span className="font-bold text-sky-800 block">Popular Study Courses:</span>
+                <div className="flex flex-wrap gap-1">
+                  <span className="bg-sky-50 text-sky-900 px-2 py-0.5 rounded font-medium text-[11px]">IT</span>
+                  <span className="bg-sky-50 text-sky-900 px-2 py-0.5 rounded font-medium text-[11px]">Hotel Management</span>
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={() => onOpenCounselling('Student Visa', 'Australia')}
+              className="w-full mt-2 bg-slate-900 hover:bg-blue-700 text-white font-bold text-xs py-2 rounded-lg transition-colors"
+            >
+              Apply for Australia Intake
+            </button>
+          </div>
+
+          {/* Dubai (UAE) */}
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 hover:border-blue-500 shadow-sm space-y-3 flex flex-col justify-between">
+            <div className="space-y-2.5">
+              <div className="flex justify-between items-center">
+                <span className="text-2xl">🇦🇪 Dubai</span>
+                <span className="text-[11px] bg-amber-50 text-amber-900 font-bold px-2 py-0.5 rounded">Tax-Free & Trades</span>
+              </div>
+              <h3 className="font-bold text-base text-slate-900">Dubai (UAE)</h3>
+              <div className="space-y-1 text-xs">
+                <span className="font-bold text-sky-800 block">Popular Study / Trade Courses:</span>
+                <div className="flex flex-wrap gap-1">
+                  <span className="bg-sky-50 text-sky-900 px-2 py-0.5 rounded font-medium text-[11px]">Nursing</span>
+                  <span className="bg-sky-50 text-sky-900 px-2 py-0.5 rounded font-medium text-[11px]">Electrical Trades</span>
+                  <span className="bg-sky-50 text-sky-900 px-2 py-0.5 rounded font-medium text-[11px]">Crane & Heavy Equipment</span>
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={() => onOpenCounselling('Student Visa', 'Dubai')}
+              className="w-full mt-2 bg-slate-900 hover:bg-blue-700 text-white font-bold text-xs py-2 rounded-lg transition-colors"
+            >
+              Apply for Dubai Intake
+            </button>
+          </div>
+
+          {/* Canada */}
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 hover:border-blue-500 shadow-sm space-y-3 flex flex-col justify-between">
+            <div className="space-y-2.5">
+              <div className="flex justify-between items-center">
+                <span className="text-2xl">🇨🇦 Canada</span>
+                <span className="text-[11px] bg-rose-50 text-rose-900 font-bold px-2 py-0.5 rounded">3-Yr PGWP & PR</span>
+              </div>
+              <h3 className="font-bold text-base text-slate-900">Canada</h3>
+              <div className="space-y-1 text-xs">
+                <span className="font-bold text-sky-800 block">Popular Study Courses:</span>
+                <div className="flex flex-wrap gap-1">
+                  <span className="bg-sky-50 text-sky-900 px-2 py-0.5 rounded font-medium text-[11px]">IT</span>
+                  <span className="bg-sky-50 text-sky-900 px-2 py-0.5 rounded font-medium text-[11px]">B.Sc Nursing</span>
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={() => onOpenCounselling('Student Visa', 'Canada')}
+              className="w-full mt-2 bg-slate-900 hover:bg-blue-700 text-white font-bold text-xs py-2 rounded-lg transition-colors"
+            >
+              Apply for Canada Intake
+            </button>
           </div>
         </div>
       </div>

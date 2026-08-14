@@ -10,6 +10,9 @@ interface AuthContextType {
   logout: () => void;
   isAuthModalOpen: boolean;
   setIsAuthModalOpen: (open: boolean) => void;
+  authMode: 'login' | 'signup';
+  setAuthMode: (mode: 'login' | 'signup') => void;
+  openUserAuth: (mode?: 'login' | 'signup') => void;
   isAdminModalOpen: boolean;
   setIsAdminModalOpen: (open: boolean) => void;
 }
@@ -24,6 +27,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   });
 
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
   const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
 
   const login = (newToken: string, newUser: User) => {
@@ -40,6 +44,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null);
   };
 
+  const openUserAuth = (mode: 'login' | 'signup' = 'login') => {
+    setAuthMode(mode);
+    setIsAuthModalOpen(true);
+  };
+
   const isAdmin = user?.role === 'admin';
 
   return (
@@ -52,6 +61,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         logout,
         isAuthModalOpen,
         setIsAuthModalOpen,
+        authMode,
+        setAuthMode,
+        openUserAuth,
         isAdminModalOpen,
         setIsAdminModalOpen,
       }}
@@ -68,3 +80,4 @@ export const useAuth = () => {
   }
   return context;
 };
+

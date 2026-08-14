@@ -58,6 +58,48 @@ export const CountryDetailPage: React.FC<CountryDetailPageProps> = ({ country, o
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left 2 Cols */}
         <div className="lg:col-span-2 space-y-8">
+          {/* Study Options & In-Demand Job Sectors */}
+          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+            <h2 className="text-2xl font-bold text-slate-900 flex items-center space-x-2">
+              <GraduationCap className="w-6 h-6 text-sky-600" />
+              <span>Study Options & In-Demand Job Roles</span>
+            </h2>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {/* Study Courses */}
+              <div className="bg-sky-50/70 p-5 rounded-xl border border-sky-100 space-y-3">
+                <div className="flex items-center space-x-2">
+                  <GraduationCap className="w-5 h-5 text-sky-700" />
+                  <h3 className="font-bold text-slate-900 text-sm uppercase tracking-wider">Top Study Courses</h3>
+                </div>
+                <div className="space-y-2">
+                  {(country.studyOptions || country.topUniversities).map((s, idx) => (
+                    <div key={idx} className="bg-white p-2.5 rounded-lg border border-sky-200/60 text-xs sm:text-sm font-semibold text-slate-800 flex items-center space-x-2 shadow-xs">
+                      <span className="w-2 h-2 bg-sky-500 rounded-full"></span>
+                      <span>{s}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Job Roles */}
+              <div className="bg-emerald-50/70 p-5 rounded-xl border border-emerald-100 space-y-3">
+                <div className="flex items-center space-x-2">
+                  <Briefcase className="w-5 h-5 text-emerald-700" />
+                  <h3 className="font-bold text-slate-900 text-sm uppercase tracking-wider">In-Demand Job Roles</h3>
+                </div>
+                <div className="space-y-2">
+                  {(country.jobRoles || country.topJobs).map((j, idx) => (
+                    <div key={idx} className="bg-white p-2.5 rounded-lg border border-emerald-200/60 text-xs sm:text-sm font-semibold text-slate-800 flex items-center space-x-2 shadow-xs">
+                      <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
+                      <span>{j}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Visa Pathways */}
           <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
             <h2 className="text-2xl font-bold text-slate-900 flex items-center space-x-2">

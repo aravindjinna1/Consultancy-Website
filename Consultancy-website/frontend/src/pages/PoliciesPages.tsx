@@ -26,14 +26,14 @@ export const PoliciesPages: React.FC<PoliciesPagesProps> = ({ type }) => {
         '1. Evaluation Retainers: Profile evaluation and document auditing fees are non-refundable once initial analysis reports have been compiled.',
         '2. Milestone Refunds: If PAR CAREERS fails to deliver agreed contractual document filing milestones due to internal oversight, milestone refunds will be processed as specified in the signed service agreement.',
         '3. Sovereign Embassy Decisions: Embassy visa fees, government filing charges, VFS appointment costs, and credential evaluation fees (WES/ACS) paid directly to external authorities are non-refundable by those respective bodies.',
-        '4. Disagreements & Escalations: Candidates can request concern resolution directly by emailing aravindjinna1@gmail.com or calling +91 8106023616.'
+        '4. Disagreements & Escalations: Candidates can request concern resolution directly by emailing Ardigitalstudio05@gmail.com or calling +91 95331 20230.'
       ]
     },
     terms: {
       title: 'Terms & Conditions',
       subtitle: 'General terms of website usage and consultancy engagement.',
       body: [
-        'By accessing or utilizing the services of PAR CAREERS AND VISA CONSULTANCY SERVICES (+91 8106023616), you agree to comply with the following terms:',
+        'By accessing or utilizing the services of PAR CAREERS AND VISA CONSULTANCY SERVICES (+91 95331 20230), you agree to comply with the following terms:',
         '1. Scope of Service: We provide expert documentation assistance, job petition guidance, university application support, and visa interview coaching. Final visa issuance decisions rest solely with sovereign government embassies.',
         '2. Candidate Obligations: Applicants must provide genuine, non-fraudulent academic transcripts, work experience certificates, and financial proof.',
         '3. Intellectual Property: All content, guides, and materials on this platform are owned by PAR CAREERS AND VISA CONSULTANCY SERVICES.',
@@ -61,7 +61,7 @@ export const PoliciesPages: React.FC<PoliciesPagesProps> = ({ type }) => {
         ))}
 
         <div className="pt-6 border-t border-slate-100 text-xs text-slate-500">
-          For questions regarding policy terms, contact our senior team at <a href="mailto:aravindjinna1@gmail.com" className="text-blue-700 font-bold underline">aravindjinna1@gmail.com</a> or Call/WhatsApp <a href="tel:+918106023616" className="text-blue-700 font-bold underline">+91 8106023616</a>.
+          For questions regarding policy terms, contact our senior team at <a href="mailto:Ardigitalstudio05@gmail.com" className="text-blue-700 font-bold underline">Ardigitalstudio05@gmail.com</a> or Call/WhatsApp <a href="tel:+919533120230" className="text-blue-700 font-bold underline">+91 95331 20230</a>.
         </div>
       </div>
     </div>

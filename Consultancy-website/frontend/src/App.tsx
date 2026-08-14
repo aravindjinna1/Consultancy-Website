@@ -37,6 +37,7 @@ export function App() {
 
   const [isAdminLoginOpen, setIsAdminLoginOpen] = useState(false);
   const [isUserAuthOpen, setIsUserAuthOpen] = useState(false);
+  const [userAuthMode, setUserAuthMode] = useState<'login' | 'signup'>('login');
 
   const [selectedJobForApply, setSelectedJobForApply] = useState<Job | null>(null);
   const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
@@ -184,7 +185,10 @@ export function App() {
           onNavClick={setActiveTab}
           onOpenCounselling={() => handleOpenCounselling()}
           onOpenAdminLogin={() => setIsAdminLoginOpen(true)}
-          onOpenUserAuth={() => setIsUserAuthOpen(true)}
+          onOpenUserAuth={(mode) => {
+            setUserAuthMode(mode || 'login');
+            setIsUserAuthOpen(true);
+          }}
         />
 
         <main className="flex-grow">
@@ -212,6 +216,7 @@ export function App() {
 
         <UserAuthModal
           isOpen={isUserAuthOpen}
+          initialMode={userAuthMode}
           onClose={() => setIsUserAuthOpen(false)}
         />
 

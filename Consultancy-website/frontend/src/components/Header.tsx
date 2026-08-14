@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Phone, Mail, MessageSquare, ShieldCheck, User as UserIcon, Lock, Menu, X, ChevronDown, GraduationCap, Briefcase, Globe, Award, HelpCircle } from 'lucide-react';
+import { Phone, Mail, MessageSquare, ShieldCheck, User as UserIcon, Lock, Menu, X, ChevronDown, GraduationCap, Briefcase, Globe, Award, HelpCircle, Instagram, Linkedin, UserPlus, LogIn, LogOut } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 interface HeaderProps {
@@ -9,7 +9,7 @@ interface HeaderProps {
   onNavClick?: (tab: string) => void;
   onOpenCounselling: () => void;
   onOpenAdminLogin?: () => void;
-  onOpenUserAuth?: () => void;
+  onOpenUserAuth?: (mode?: 'login' | 'signup') => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -21,7 +21,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenAdminLogin,
   onOpenUserAuth
 }) => {
-  const { user, isAdmin, logout, setIsAuthModalOpen, setIsAdminModalOpen } = useAuth();
+  const { user, isAdmin, logout, openUserAuth, setIsAdminModalOpen } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [countriesDropdownOpen, setCountriesDropdownOpen] = useState(false);
 
@@ -47,40 +47,70 @@ export const Header: React.FC<HeaderProps> = ({
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleOpenAuth = (mode: 'login' | 'signup') => {
+    if (onOpenUserAuth) {
+      onOpenUserAuth(mode);
+    } else {
+      openUserAuth(mode);
+    }
+  };
+
   return (
     <header className="w-full sticky top-0 z-40 bg-white shadow-sm border-b border-slate-100">
       {/* Top Contact Bar */}
       <div className="bg-slate-900 text-slate-200 text-xs py-2 px-4 sm:px-8 transition-colors">
         <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
-          <div className="flex items-center space-x-6 flex-wrap gap-y-1">
+          <div className="flex items-center space-x-5 flex-wrap gap-y-1">
             <a
-              href="tel:+918106023616"
+              href="tel:+919533120230"
               className="flex items-center space-x-1.5 hover:text-sky-400 transition-colors"
               title="Call PAR CAREERS"
             >
               <Phone className="w-3.5 h-3.5 text-sky-400" />
-              <span>+91 8106023616</span>
+              <span>+91 95331 20230</span>
             </a>
             <a
-              href="https://wa.me/918106023616?text=Hello%20PAR%20CAREERS%2C%20I%20would%20like%20to%20inquire%20about%20overseas%20visas"
+              href="https://wa.me/919533120230?text=Hello%20PAR%20CAREERS%2C%20I%20would%20like%20to%20inquire%20about%20overseas%20visas"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center space-x-1.5 hover:text-emerald-400 transition-colors"
               title="WhatsApp PAR CAREERS"
             >
               <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="font-medium">WhatsApp: +91 8106023616</span>
+              <span className="font-medium">WhatsApp: +91 95331 20230</span>
             </a>
             <a
-              href="mailto:aravindjinna1@gmail.com"
+              href="mailto:Ardigitalstudio05@gmail.com"
               className="hidden md:flex items-center space-x-1.5 hover:text-sky-400 transition-colors"
             >
               <Mail className="w-3.5 h-3.5 text-slate-400" />
-              <span>aravindjinna1@gmail.com</span>
+              <span>Ardigitalstudio05@gmail.com</span>
             </a>
+
+            {/* Social Media Header Icons */}
+            <div className="flex items-center space-x-3 text-slate-400 pl-2 border-l border-slate-800">
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-pink-400 transition-colors"
+                title="Follow us on Instagram"
+              >
+                <Instagram className="w-3.5 h-3.5" />
+              </a>
+              <a
+                href="https://linkedin.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-sky-400 transition-colors"
+                title="Connect with us on LinkedIn"
+              >
+                <Linkedin className="w-3.5 h-3.5" />
+              </a>
+            </div>
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
             <button
               onClick={() => handleNavClick('trust-standard')}
               className="hidden lg:flex items-center space-x-1 text-slate-300 hover:text-sky-300 transition-colors"
@@ -90,32 +120,51 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
 
             {user ? (
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-2">
                 <button
                   onClick={() => handleNavClick(isAdmin ? 'admin-dashboard' : 'user-dashboard')}
-                  className="flex items-center space-x-1 text-sky-300 font-medium hover:underline"
+                  className="flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-sky-950/80 border border-sky-700/60 text-sky-300 text-xs font-semibold hover:bg-sky-900 transition-colors"
                 >
-                  <UserIcon className="w-3.5 h-3.5" />
+                  <UserIcon className="w-3.5 h-3.5 text-sky-400" />
                   <span>{user.name.split(' ')[0]} ({isAdmin ? 'Admin' : 'Dashboard'})</span>
                 </button>
+
+                {/* Prominent Logout Button when user is logged in */}
                 <button
                   onClick={logout}
-                  className="text-slate-400 hover:text-red-400 text-xs transition-colors"
+                  className="flex items-center space-x-1 px-2.5 py-1 rounded-lg bg-red-600 hover:bg-red-700 text-white text-xs font-bold transition-all shadow-sm transform hover:scale-105"
+                  title="Logout from account"
                 >
-                  Sign Out
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span>Logout</span>
                 </button>
               </div>
             ) : (
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-2">
+                {/* Visible Login Button */}
                 <button
-                  onClick={() => setIsAuthModalOpen(true)}
-                  className="hover:text-white transition-colors"
+                  onClick={() => handleOpenAuth('login')}
+                  className="flex items-center space-x-1.5 px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-bold border border-slate-700 transition-all shadow-sm hover:border-slate-500"
                 >
-                  Login / Signup
+                  <LogIn className="w-3.5 h-3.5 text-sky-400" />
+                  <span>Login</span>
                 </button>
+
+                {/* Visible Register / Signup Button */}
+                <button
+                  onClick={() => handleOpenAuth('signup')}
+                  className="flex items-center space-x-1.5 px-3 py-1 rounded-lg bg-gradient-to-r from-blue-600 to-sky-500 hover:from-blue-700 hover:to-sky-600 text-white text-xs font-bold shadow-md hover:shadow-lg transition-all transform hover:scale-105"
+                >
+                  <UserPlus className="w-3.5 h-3.5" />
+                  <span>Register</span>
+                </button>
+
                 {/* Discrete Admin verification door for direct authorization */}
                 <button
-                  onClick={() => setIsAdminModalOpen(true)}
+                  onClick={() => {
+                    if (onOpenAdminLogin) onOpenAdminLogin();
+                    else setIsAdminModalOpen(true);
+                  }}
                   className="text-slate-500 hover:text-slate-300 transition-colors p-1"
                   title="Staff Portal Verification"
                 >
@@ -245,7 +294,55 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-white border-t border-slate-100 px-6 py-4 space-y-3 animate-fadeIn shadow-xl">
+        <div className="lg:hidden bg-white border-t border-slate-100 px-6 py-4 space-y-4 animate-fadeIn shadow-xl">
+          {/* Mobile Auth Buttons */}
+          <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
+            {user ? (
+              <div className="flex items-center justify-between gap-2">
+                <button
+                  onClick={() => handleNavClick(isAdmin ? 'admin-dashboard' : 'user-dashboard')}
+                  className="flex items-center space-x-2 text-sm font-bold text-slate-800 hover:text-blue-700"
+                >
+                  <UserIcon className="w-4 h-4 text-sky-600" />
+                  <span>{user.name}</span>
+                </button>
+                <button
+                  onClick={() => {
+                    logout();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="px-3 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-xs font-bold transition-colors flex items-center space-x-1"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span>Logout</span>
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    handleOpenAuth('login');
+                    setMobileMenuOpen(false);
+                  }}
+                  className="flex-1 py-2 px-3 rounded-lg bg-slate-800 text-white text-xs font-bold flex items-center justify-center space-x-1.5 shadow-sm"
+                >
+                  <LogIn className="w-3.5 h-3.5 text-sky-400" />
+                  <span>Login</span>
+                </button>
+                <button
+                  onClick={() => {
+                    handleOpenAuth('signup');
+                    setMobileMenuOpen(false);
+                  }}
+                  className="flex-1 py-2 px-3 rounded-lg bg-blue-700 text-white text-xs font-bold flex items-center justify-center space-x-1.5 shadow-md"
+                >
+                  <UserPlus className="w-3.5 h-3.5" />
+                  <span>Register</span>
+                </button>
+              </div>
+            )}
+          </div>
+
           <div className="grid grid-cols-2 gap-2 text-sm font-medium text-slate-700 pb-2 border-b border-slate-100">
             <button
               onClick={() => handleNavClick('home')}

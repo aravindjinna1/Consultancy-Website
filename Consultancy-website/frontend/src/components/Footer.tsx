@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Phone, Mail, MessageSquare, MapPin, ShieldCheck, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Phone, Mail, MessageSquare, MapPin, ShieldCheck, ArrowRight, CheckCircle2, Instagram, Linkedin } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 interface FooterProps {
@@ -55,18 +55,52 @@ export const Footer: React.FC<FooterProps> = ({ onNavClick, onOpenAdminLogin }) 
             </p>
 
             <div className="pt-2 space-y-2 text-sm text-slate-300">
-              <a href="tel:+918106023616" className="flex items-center space-x-3 hover:text-sky-400 transition-colors">
+              <a href="tel:+919533120230" className="flex items-center space-x-3 hover:text-sky-400 transition-colors">
                 <Phone className="w-4 h-4 text-sky-400 flex-shrink-0" />
-                <span>+91 8106023616</span>
+                <span>+91 95331 20230</span>
               </a>
-              <a href="https://wa.me/918106023616" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3 hover:text-emerald-400 transition-colors">
+              <a href="https://wa.me/919533120230" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3 hover:text-emerald-400 transition-colors">
                 <MessageSquare className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                <span>WhatsApp: +91 8106023616</span>
+                <span>WhatsApp: +91 95331 20230</span>
               </a>
-              <a href="mailto:aravindjinna1@gmail.com" className="flex items-center space-x-3 hover:text-sky-400 transition-colors">
+              <a href="mailto:Ardigitalstudio05@gmail.com" className="flex items-center space-x-3 hover:text-sky-400 transition-colors">
                 <Mail className="w-4 h-4 text-sky-400 flex-shrink-0" />
-                <span>aravindjinna1@gmail.com</span>
+                <span>Ardigitalstudio05@gmail.com</span>
               </a>
+            </div>
+
+            {/* Social Media Links */}
+            <div className="pt-3">
+              <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Connect With Us</div>
+              <div className="flex items-center space-x-3">
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-300 hover:text-pink-400 hover:border-pink-500/50 transition-colors"
+                  title="Instagram"
+                >
+                  <Instagram className="w-4 h-4" />
+                </a>
+                <a
+                  href="https://linkedin.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-300 hover:text-sky-400 hover:border-sky-500/50 transition-colors"
+                  title="LinkedIn"
+                >
+                  <Linkedin className="w-4 h-4" />
+                </a>
+                <a
+                  href="https://wa.me/919533120230"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-300 hover:text-emerald-400 hover:border-emerald-500/50 transition-colors"
+                  title="WhatsApp"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                </a>
+              </div>
             </div>
           </div>
 

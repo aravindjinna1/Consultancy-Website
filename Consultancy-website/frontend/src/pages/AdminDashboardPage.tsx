@@ -27,6 +27,12 @@ export const AdminDashboardPage: React.FC = () => {
   const [contactsList, setContactsList] = useState<ContactMessage[]>([]);
   const [jobsList, setJobsList] = useState<Job[]>([]);
 
+  // Database Connection Inspector & Config State
+  const [dbStatus, setDbStatus] = useState<any>(null);
+  const [customUriInput, setCustomUriInput] = useState('');
+  const [isUpdatingDb, setIsUpdatingDb] = useState(false);
+  const [dbNotice, setDbNotice] = useState<string | null>(null);
+
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -66,11 +72,55 @@ export const AdminDashboardPage: React.FC = () => {
       setApplicationsList(aRes.data || []);
       setContactsList(cntRes.data || []);
       setJobsList(jRes.data || []);
+
+      // Fetch Live Database Status & Config
+      try {
+        const token = localStorage.getItem('par_auth_token');
+        const dbRes = await fetch('/api/admin/db-status', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const dbJson = await dbRes.json();
+        if (dbJson.success) {
+          setDbStatus(dbJson.data);
+          if (dbJson.data.currentUri) {
+            setCustomUriInput(dbJson.data.currentUri);
+          }
+        }
+      } catch (e) {}
     } catch (err) {
       console.error('[Admin Load Error]', err);
     } finally {
       setLoading(false);
       setRefreshing(false);
+    }
+  };
+
+  const handleUpdateDatabaseUri = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!customUriInput.trim()) return;
+    setIsUpdatingDb(true);
+    setDbNotice(null);
+    try {
+      const token = localStorage.getItem('par_auth_token');
+      const res = await fetch('/api/admin/update-db-uri', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ uri: customUriInput.trim() })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setDbNotice('✅ ' + data.message);
+        loadData();
+      } else {
+        setDbNotice('❌ ' + (data.message || 'Failed connecting to database'));
+      }
+    } catch (err: any) {
+      setDbNotice('❌ Connection request failed: ' + err.message);
+    } finally {
+      setIsUpdatingDb(false);
     }
   };
 
@@ -86,7 +136,7 @@ export const AdminDashboardPage: React.FC = () => {
         <ShieldCheck className="w-12 h-12 text-red-500 mx-auto" />
         <h2 className="text-xl font-bold text-slate-900">Access Denied</h2>
         <p className="text-slate-600 text-xs">
-          You do not have administrative privileges. Admin access requires allow-list OTP verification (<span className="font-semibold text-blue-700">aravindjinna1@gmail.com</span>).
+          You do not have administrative privileges. Admin access requires allow-list OTP verification (<span className="font-semibold text-blue-700">Ardigitalstudio05@gmail.com</span>).
         </p>
       </div>
     );
@@ -225,6 +275,77 @@ export const AdminDashboardPage: React.FC = () => {
       {/* Tab 1: Overview */}
       {activeTab === 'overview' && (
         <div className="space-y-8">
+          {/* MongoDB Atlas Live Connection & URI Inspector Box */}
+          <div className={`p-6 rounded-3xl border shadow-sm transition-all ${
+            dbStatus?.isConnected ? 'bg-emerald-50/70 border-emerald-200' : 'bg-amber-50/70 border-amber-200'
+          }`}>
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div className="flex items-start space-x-3.5">
+                <div className={`w-3.5 h-3.5 mt-1 rounded-full shrink-0 ${
+                  dbStatus?.isConnected ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500 animate-ping'
+                }`} />
+                <div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h3 className="font-bold text-slate-900 text-sm sm:text-base">
+                      {dbStatus?.isConnected ? 'MongoDB Atlas Database: Connected & Synchronized' : 'MongoDB Atlas Database: Authentication Pending'}
+                    </h3>
+                    <span className={`text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full ${
+                      dbStatus?.isConnected ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-900'
+                    }`}>
+                      {dbStatus?.isConnected ? 'Live in Atlas' : 'Action Required'}
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-600 mt-1 max-w-3xl leading-relaxed">
+                    {dbStatus?.isConnected
+                      ? `All registrations, jobs, applications, counselling requests, and contact inquiries are writing directly to your MongoDB Atlas database (${dbStatus?.dbName || 'par_careers'}).`
+                      : 'Atlas cluster rejected the current database credentials with "bad auth : authentication failed". Inspect and update your connection string below to connect and seed Atlas.'}
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={loadData}
+                disabled={refreshing}
+                className="text-xs font-bold px-3 py-1.5 rounded-xl bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 shadow-sm shrink-0"
+              >
+                Test & Refresh
+              </button>
+            </div>
+
+            {/* Connection URI Form */}
+            <form onSubmit={handleUpdateDatabaseUri} className="mt-5 pt-4 border-t border-slate-200/80 space-y-3">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  Active MongoDB Connection URI (MONGODB_URI):
+                </label>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <input
+                    type="text"
+                    value={customUriInput}
+                    onChange={(e) => setCustomUriInput(e.target.value)}
+                    placeholder="mongodb+srv://aravindjinna1_db_user:<password>@cluster0.mriykpc.mongodb.net/par_careers"
+                    className="flex-1 px-3.5 py-2 text-xs font-mono rounded-xl border border-slate-300 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-inner"
+                  />
+                  <button
+                    type="submit"
+                    disabled={isUpdatingDb}
+                    className="px-5 py-2 bg-blue-900 hover:bg-blue-800 text-white rounded-xl text-xs font-bold whitespace-nowrap shadow-md disabled:opacity-50 transition-colors"
+                  >
+                    {isUpdatingDb ? 'Connecting & Syncing...' : 'Save & Connect to Atlas'}
+                  </button>
+                </div>
+              </div>
+
+              {dbNotice && (
+                <div className={`p-3 rounded-xl text-xs font-medium ${
+                  dbNotice.startsWith('✅') ? 'bg-emerald-100 text-emerald-900 border border-emerald-300' : 'bg-red-100 text-red-900 border border-red-300'
+                }`}>
+                  {dbNotice}
+                </div>
+              )}
+            </form>
+          </div>
+
           {/* Key Metric Cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">

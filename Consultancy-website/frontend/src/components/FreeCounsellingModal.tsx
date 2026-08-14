@@ -221,12 +221,13 @@ export const FreeCounsellingModal: React.FC<FreeCounsellingModalProps> = ({
                     onChange={(e) => setFormData({ ...formData, preferredCountry: e.target.value })}
                     className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:bg-white focus:border-blue-600 font-medium"
                   >
-                    <option value="Germany">🇩🇪 Germany (Chancenkarte / EU Blue Card)</option>
-                    <option value="Singapore">🇸🇬 Singapore (EP / S Pass)</option>
-                    <option value="Australia">🇦🇺 Australia (PR / Subclass 482)</option>
-                    <option value="United Kingdom">🇬🇧 United Kingdom (Skilled Worker)</option>
-                    <option value="Canada">🇨🇦 Canada (Express Entry / PNP)</option>
-                    <option value="United States">🇺🇸 United States (H-1B / F-1 STEM)</option>
+                    <option value="United Kingdom">🇬🇧 UK (Hotel Management, IT, B.Sc Nursing)</option>
+                    <option value="Russia">🇷🇺 Russia (Nursing, Hotel Management)</option>
+                    <option value="Germany">🇩🇪 Germany (Doctors, Nursing, Aeronautical Engineering)</option>
+                    <option value="Singapore">🇸🇬 Singapore (B.Sc Nursing, ANM/GNM, IT, Hotel Management, Mechanical)</option>
+                    <option value="Australia">🇦🇺 Australia (IT, Hotel Management)</option>
+                    <option value="Dubai">🇦🇪 Dubai (Nursing, Crane Machine Operator, Electrician)</option>
+                    <option value="Canada">🇨🇦 Canada (IT, B.Sc Nursing)</option>
                   </select>
                 </div>
 

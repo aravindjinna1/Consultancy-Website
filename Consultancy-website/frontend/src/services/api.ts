@@ -25,17 +25,36 @@ export const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const response = await fetch(`${API_BASE}${endpoint}`, {
-    ...options,
-    headers
-  });
-
-  const data = await response.json();
-  if (!response.ok) {
-    throw new Error(data.message || 'API request failed');
+  let response: Response;
+  try {
+    response = await fetch(`${API_BASE}${endpoint}`, {
+      ...options,
+      headers
+    });
+  } catch (err: any) {
+    throw new Error(`Network error connecting to backend API: ${err.message || 'Server unavailable'}`);
   }
 
-  return data;
+  const contentType = response.headers.get('content-type') || '';
+
+  if (contentType.includes('application/json')) {
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message || `API request failed with status ${response.status}`);
+    }
+    return data;
+  } else {
+    // Non-JSON response (e.g. HTML error page from server or 404)
+    const text = await response.text();
+    if (!response.ok) {
+      throw new Error(`Server returned HTTP ${response.status}: ${response.statusText || 'Operation failed'}`);
+    }
+    try {
+      return JSON.parse(text);
+    } catch {
+      throw new Error('Server returned invalid response format.');
+    }
+  }
 };
 
 // Services API calls
