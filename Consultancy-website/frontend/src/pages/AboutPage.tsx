@@ -55,14 +55,14 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onOpenCounselling }) => {
           </div>
           <div>
             <div className="text-xs text-sky-400 uppercase font-bold tracking-wider mb-1">Direct Senior Phone / WhatsApp</div>
-            <a href="tel:+919533120230" className="font-bold text-white text-base hover:text-sky-300">
-              +91 95331 20230
+            <a href="tel:+918019021039" className="font-bold text-white text-base hover:text-sky-300">
+              +91 8019021039
             </a>
           </div>
           <div>
             <div className="text-xs text-sky-400 uppercase font-bold tracking-wider mb-1">Official Desk Email</div>
-            <a href="mailto:Ardigitalstudio05@gmail.com" className="font-bold text-white text-base hover:text-sky-300">
-              Ardigitalstudio05@gmail.com
+            <a href="mailto:parvisaandcareer94@gmail.com" className="font-bold text-white text-base hover:text-sky-300">
+              parvisaandcareer94@gmail.com
             </a>
           </div>
         </div>

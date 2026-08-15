@@ -166,7 +166,7 @@ export const UserAuthModal: React.FC<UserAuthModalProps> = ({ isOpen: propIsOpen
                   <input
                     type="tel"
                     required
-                    placeholder="+91 95331 20230"
+                    placeholder="+91 8019021039"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     className="w-full bg-slate-50 border border-slate-200 rounded-lg pl-9 pr-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white transition-colors"

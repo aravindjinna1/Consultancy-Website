@@ -376,7 +376,7 @@ To qualify, candidates must score at least **6 points** based on criteria includ
 - Permitted to work up to 20 hours per week in trial employment or part-time jobs.
 - Direct conversion into an EU Blue Card or Work Permit once a job contract is signed.
 
-Contact PAR CAREERS AND VISA CONSULTANCY SERVICES (+91 8106023616) to evaluate your Chancenkarte eligibility today!`,
+Contact PAR CAREERS AND VISA CONSULTANCY SERVICES (+91 8019021039) to evaluate your Chancenkarte eligibility today!`,
     category: 'Work Visa',
     author: 'PAR Careers Editorial Team',
     date: '2026-08-02',
@@ -399,7 +399,7 @@ Contact PAR CAREERS AND VISA CONSULTANCY SERVICES (+91 8106023616) to evaluate y
 
 At PAR CAREERS AND VISA CONSULTANCY SERVICES, our immigration team guides you through verified employer matching and seamless visa processing.`,
     category: 'Immigration Policy',
-    author: 'Aravind Jinna',
+    author: 'Senior Immigration Consultant',
     date: '2026-08-06',
     readTime: '4 min read',
     imageUrl: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80',
@@ -451,7 +451,7 @@ export const INITIAL_NEWS: NewsItem[] = [
   {
     id: 'news-3',
     title: 'PAR CAREERS Opens Free Dedicated Guidance Counter for Overseas Students & Job Seekers',
-    excerpt: 'Schedule personalized 1-on-1 profile assessment sessions with experienced visa counselors at +91 8106023616.',
+    excerpt: 'Schedule personalized 1-on-1 profile assessment sessions with experienced visa counselors at +91 8019021039.',
     content: 'PAR CAREERS AND VISA CONSULTANCY SERVICES reaffirms its commitment to transparent, ethical overseas guidance by launching free assessment sessions.',
     date: '2026-08-01',
     category: 'Company Update',
@@ -467,7 +467,7 @@ export const INITIAL_TESTIMONIALS: Testimonial[] = [
     service: 'Work Visa & Relocation',
     visaType: 'EU Blue Card',
     rating: 5,
-    text: 'PAR CAREERS made my dream of working in Berlin a reality! From degree recognition (Anabin) to mock visa interviews, Mr. Aravind Jinna\'s team guided me transparently with zero hidden costs.',
+    text: 'PAR CAREERS made my dream of working in Berlin a reality! From degree recognition (Anabin) to mock visa interviews, the dedicated consultancy team guided me transparently with zero hidden costs.',
     year: '2026',
     photoUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
     verified: true

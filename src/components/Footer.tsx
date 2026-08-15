@@ -46,17 +46,17 @@ export const Footer: React.FC<FooterProps> = ({ onNavClick }) => {
             </p>
 
             <div className="pt-2 space-y-2 text-sm text-slate-300">
-              <a href="tel:+918106023616" className="flex items-center space-x-3 hover:text-sky-400 transition-colors">
+              <a href="tel:+918019021039" className="flex items-center space-x-3 hover:text-sky-400 transition-colors">
                 <Phone className="w-4 h-4 text-sky-400 flex-shrink-0" />
-                <span>+91 8106023616</span>
+                <span>+91 8019021039</span>
               </a>
-              <a href="https://wa.me/918106023616" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3 hover:text-emerald-400 transition-colors">
+              <a href="https://wa.me/918019021039" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3 hover:text-emerald-400 transition-colors">
                 <MessageSquare className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                <span>WhatsApp: +91 8106023616</span>
+                <span>WhatsApp: +91 8019021039</span>
               </a>
-              <a href="mailto:aravindjinna1@gmail.com" className="flex items-center space-x-3 hover:text-sky-400 transition-colors">
+              <a href="mailto:parvisaandcareer94@gmail.com" className="flex items-center space-x-3 hover:text-sky-400 transition-colors">
                 <Mail className="w-4 h-4 text-sky-400 flex-shrink-0" />
-                <span>aravindjinna1@gmail.com</span>
+                <span>parvisaandcareer94@gmail.com</span>
               </a>
             </div>
           </div>

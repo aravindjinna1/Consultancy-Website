@@ -54,29 +54,29 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
           <div className="flex items-center space-x-6 flex-wrap gap-y-1">
             <a
-              href="tel:+918106023616"
+              href="tel:+918019021039"
               className="flex items-center space-x-1.5 hover:text-sky-400 transition-colors"
               title="Call PAR CAREERS"
             >
               <Phone className="w-3.5 h-3.5 text-sky-400" />
-              <span>+91 8106023616</span>
+              <span>+91 8019021039</span>
             </a>
             <a
-              href="https://wa.me/918106023616?text=Hello%20PAR%20CAREERS%2C%20I%20would%20like%20to%20inquire%20about%20overseas%20visas"
+              href="https://wa.me/918019021039?text=Hello%20PAR%20CAREERS%2C%20I%20would%20like%20to%20inquire%20about%20overseas%20visas"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center space-x-1.5 hover:text-emerald-400 transition-colors"
               title="WhatsApp PAR CAREERS"
             >
               <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="font-medium">WhatsApp: +91 8106023616</span>
+              <span className="font-medium">WhatsApp: +91 8019021039</span>
             </a>
             <a
-              href="mailto:aravindjinna1@gmail.com"
+              href="mailto:parvisaandcareer94@gmail.com"
               className="hidden md:flex items-center space-x-1.5 hover:text-sky-400 transition-colors"
             >
               <Mail className="w-3.5 h-3.5 text-slate-400" />
-              <span>aravindjinna1@gmail.com</span>
+              <span>parvisaandcareer94@gmail.com</span>
             </a>
           </div>
 

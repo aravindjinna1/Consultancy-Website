@@ -12,7 +12,7 @@ interface AdminLoginModalProps {
 export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({ isOpen, onClose, onSuccess }) => {
   const { login } = useAuth();
   const [step, setStep] = useState<'email' | 'otp'>('email');
-  const [email, setEmail] = useState('aravindjinna1@gmail.com');
+  const [email, setEmail] = useState('parvisaandcareer94@gmail.com');
   const [otp, setOtp] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -94,7 +94,7 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({ isOpen, onClos
           {step === 'email' ? (
             <form onSubmit={handleRequestOTP} className="space-y-4">
               <div className="bg-amber-50 border border-amber-200 text-amber-800 text-xs p-3 rounded-xl leading-relaxed">
-                🔒 Access restricted to authorized PAR CAREERS administrative email allow-list (<span className="font-bold">aravindjinna1@gmail.com</span>).
+                🔒 Access restricted to authorized PAR CAREERS administrative email allow-list (<span className="font-bold">parvisaandcareer94@gmail.com</span>).
               </div>
 
               <div>
@@ -106,7 +106,7 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({ isOpen, onClos
                   <input
                     type="email"
                     required
-                    placeholder="aravindjinna1@gmail.com"
+                    placeholder="parvisaandcareer94@gmail.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="w-full bg-slate-50 border border-slate-200 rounded-lg pl-9 pr-3 py-2 text-sm font-medium text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white"

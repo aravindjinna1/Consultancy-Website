@@ -51,7 +51,7 @@ export const ContactPage: React.FC = () => {
               <CheckCircle2 className="w-12 h-12 text-emerald-600 mx-auto" />
               <h3 className="font-bold text-lg text-slate-900">Message Delivered!</h3>
               <p className="text-slate-600 text-xs sm:text-sm">
-                Your inquiry has been sent to our desk (<strong className="text-blue-700">Ardigitalstudio05@gmail.com</strong>). We will respond within 24 business hours.
+                Your inquiry has been sent to our desk (<strong className="text-blue-700">parvisaandcareer94@gmail.com</strong>). We will respond within 24 business hours.
               </p>
               <button
                 onClick={() => setSuccess(false)}
@@ -75,7 +75,7 @@ export const ContactPage: React.FC = () => {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Aravind Jinna"
+                    placeholder="e.g. Rahul Sharma"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-600"
@@ -98,7 +98,7 @@ export const ContactPage: React.FC = () => {
                   <label className="block text-xs font-semibold text-slate-700 mb-1">Phone Number</label>
                   <input
                     type="tel"
-                    placeholder="+91 95331 20230"
+                    placeholder="+91 8019021039"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-600"
@@ -150,27 +150,27 @@ export const ContactPage: React.FC = () => {
             <h3 className="font-bold text-lg text-white border-b border-slate-800 pb-2">Direct Contact Details</h3>
 
             <div className="space-y-3 text-sm text-slate-300">
-              <a href="tel:+919533120230" className="flex items-start space-x-3 hover:text-sky-400 transition-colors">
+              <a href="tel:+918019021039" className="flex items-start space-x-3 hover:text-sky-400 transition-colors">
                 <Phone className="w-5 h-5 text-sky-400 flex-shrink-0 mt-0.5" />
                 <div>
                   <div className="text-xs text-slate-400">Phone Consultation:</div>
-                  <div className="font-bold text-white text-base">+91 95331 20230</div>
+                  <div className="font-bold text-white text-base">+91 8019021039</div>
                 </div>
               </a>
 
-              <a href="https://wa.me/919533120230" target="_blank" rel="noopener noreferrer" className="flex items-start space-x-3 hover:text-emerald-400 transition-colors">
+              <a href="https://wa.me/918019021039" target="_blank" rel="noopener noreferrer" className="flex items-start space-x-3 hover:text-emerald-400 transition-colors">
                 <MessageSquare className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
                 <div>
                   <div className="text-xs text-slate-400">WhatsApp Desk:</div>
-                  <div className="font-bold text-emerald-400 text-base">+91 95331 20230</div>
+                  <div className="font-bold text-emerald-400 text-base">+91 8019021039</div>
                 </div>
               </a>
 
-              <a href="mailto:Ardigitalstudio05@gmail.com" className="flex items-start space-x-3 hover:text-sky-400 transition-colors">
+              <a href="mailto:parvisaandcareer94@gmail.com" className="flex items-start space-x-3 hover:text-sky-400 transition-colors">
                 <Mail className="w-5 h-5 text-sky-400 flex-shrink-0 mt-0.5" />
                 <div>
                   <div className="text-xs text-slate-400">Official Desk Email:</div>
-                  <div className="font-bold text-white text-sm">Ardigitalstudio05@gmail.com</div>
+                  <div className="font-bold text-white text-sm">parvisaandcareer94@gmail.com</div>
                 </div>
               </a>
 
@@ -206,7 +206,7 @@ export const ContactPage: React.FC = () => {
                   <span>LinkedIn</span>
                 </a>
                 <a
-                  href="https://wa.me/919533120230"
+                  href="https://wa.me/918019021039"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-slate-800 hover:bg-slate-700 text-slate-200 p-2.5 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 transition-colors"

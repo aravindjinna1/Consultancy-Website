@@ -55,17 +55,17 @@ export const Footer: React.FC<FooterProps> = ({ onNavClick, onOpenAdminLogin }) 
             </p>
 
             <div className="pt-2 space-y-2 text-sm text-slate-300">
-              <a href="tel:+919533120230" className="flex items-center space-x-3 hover:text-sky-400 transition-colors">
+              <a href="tel:+918019021039" className="flex items-center space-x-3 hover:text-sky-400 transition-colors">
                 <Phone className="w-4 h-4 text-sky-400 flex-shrink-0" />
-                <span>+91 95331 20230</span>
+                <span>+91 8019021039</span>
               </a>
-              <a href="https://wa.me/919533120230" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3 hover:text-emerald-400 transition-colors">
+              <a href="https://wa.me/918019021039" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3 hover:text-emerald-400 transition-colors">
                 <MessageSquare className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                <span>WhatsApp: +91 95331 20230</span>
+                <span>WhatsApp: +91 8019021039</span>
               </a>
-              <a href="mailto:Ardigitalstudio05@gmail.com" className="flex items-center space-x-3 hover:text-sky-400 transition-colors">
+              <a href="mailto:parvisaandcareer94@gmail.com" className="flex items-center space-x-3 hover:text-sky-400 transition-colors">
                 <Mail className="w-4 h-4 text-sky-400 flex-shrink-0" />
-                <span>Ardigitalstudio05@gmail.com</span>
+                <span>parvisaandcareer94@gmail.com</span>
               </a>
             </div>
 
@@ -92,7 +92,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavClick, onOpenAdminLogin }) 
                   <Linkedin className="w-4 h-4" />
                 </a>
                 <a
-                  href="https://wa.me/919533120230"
+                  href="https://wa.me/918019021039"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-300 hover:text-emerald-400 hover:border-emerald-500/50 transition-colors"

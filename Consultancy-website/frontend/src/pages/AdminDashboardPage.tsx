@@ -136,7 +136,7 @@ export const AdminDashboardPage: React.FC = () => {
         <ShieldCheck className="w-12 h-12 text-red-500 mx-auto" />
         <h2 className="text-xl font-bold text-slate-900">Access Denied</h2>
         <p className="text-slate-600 text-xs">
-          You do not have administrative privileges. Admin access requires allow-list OTP verification (<span className="font-semibold text-blue-700">Ardigitalstudio05@gmail.com</span>).
+          You do not have administrative privileges. Admin access requires allow-list OTP verification (<span className="font-semibold text-blue-700">parvisaandcareer94@gmail.com</span>).
         </p>
       </div>
     );
@@ -323,7 +323,7 @@ export const AdminDashboardPage: React.FC = () => {
                     type="text"
                     value={customUriInput}
                     onChange={(e) => setCustomUriInput(e.target.value)}
-                    placeholder="mongodb+srv://aravindjinna1_db_user:<password>@cluster0.mriykpc.mongodb.net/par_careers"
+                    placeholder="mongodb+srv://admin_db_user:<password>@cluster0.mongodb.net/par_careers"
                     className="flex-1 px-3.5 py-2 text-xs font-mono rounded-xl border border-slate-300 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-inner"
                   />
                   <button

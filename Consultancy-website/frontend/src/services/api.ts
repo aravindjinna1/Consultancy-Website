@@ -38,21 +38,25 @@ export const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
   const contentType = response.headers.get('content-type') || '';
 
   if (contentType.includes('application/json')) {
-    const data = await response.json();
+    const data = await response.json().catch(() => ({}));
     if (!response.ok) {
       throw new Error(data.message || `API request failed with status ${response.status}`);
     }
     return data;
   } else {
-    // Non-JSON response (e.g. HTML error page from server or 404)
-    const text = await response.text();
-    if (!response.ok) {
-      throw new Error(`Server returned HTTP ${response.status}: ${response.statusText || 'Operation failed'}`);
-    }
+    // Non-JSON response
+    const text = await response.text().catch(() => '');
     try {
-      return JSON.parse(text);
+      const parsed = JSON.parse(text);
+      if (!response.ok) {
+        throw new Error(parsed.message || `API request failed with status ${response.status}`);
+      }
+      return parsed;
     } catch {
-      throw new Error('Server returned invalid response format.');
+      if (!response.ok) {
+        throw new Error(`Server returned HTTP ${response.status}: ${response.statusText || 'Operation failed'}`);
+      }
+      return { success: true, text };
     }
   }
 };

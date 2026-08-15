@@ -116,7 +116,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavClick, onOpenCounsellin
                   Expert assistance for university shortlisting, SOP crafting, tuition-free public universities in Germany, and visa processing.
                 </p>
                 <div className="pt-1 flex items-center justify-between text-xs">
-                  <span className="text-slate-400 text-[11px]">Direct Support: <a href="tel:+918106023616" className="text-sky-300 font-bold underline">+91 8106023616</a></span>
+                  <span className="text-slate-400 text-[11px]">Direct Support: <a href="tel:+918019021039" className="text-sky-300 font-bold underline">+91 8019021039</a></span>
                   <button
                     onClick={() => onNavClick('student-visa')}
                     className="bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs px-3 py-1.5 rounded-lg transition-colors flex items-center space-x-1"
@@ -436,11 +436,11 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavClick, onOpenCounsellin
               Get Free Counselling
             </button>
             <a
-              href="tel:+918106023616"
+              href="tel:+918019021039"
               className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm px-6 py-3.5 rounded-xl transition-colors flex items-center justify-center space-x-2"
             >
               <Phone className="w-4 h-4" />
-              <span>Call +91 8106023616</span>
+              <span>Call +91 8019021039</span>
             </a>
           </div>
         </div>

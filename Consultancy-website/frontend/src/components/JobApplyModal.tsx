@@ -146,7 +146,7 @@ export const JobApplyModal: React.FC<JobApplyModalProps> = ({ job, isOpen = true
               </div>
               <h3 className="text-xl font-bold text-slate-900">Application Submitted!</h3>
               <p className="text-slate-600 text-sm max-w-md mx-auto leading-relaxed">
-                Your application for <strong className="text-slate-900">{job.title}</strong> has been transmitted to our recruitment desk (<span className="text-blue-700 font-medium">aravindjinna1@gmail.com</span>).
+                Your application for <strong className="text-slate-900">{job.title}</strong> has been transmitted to our recruitment desk (<span className="text-blue-700 font-medium">parvisaandcareer94@gmail.com</span>).
               </p>
               <button
                 onClick={handleClose}
@@ -185,7 +185,7 @@ export const JobApplyModal: React.FC<JobApplyModalProps> = ({ job, isOpen = true
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Aravind Jinna"
+                    placeholder="e.g. Rahul Sharma"
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                     className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white"
@@ -213,7 +213,7 @@ export const JobApplyModal: React.FC<JobApplyModalProps> = ({ job, isOpen = true
                   <input
                     type="tel"
                     required
-                    placeholder="+91 8106023616"
+                    placeholder="+91 8019021039"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white"
@@ -350,7 +350,7 @@ export const JobApplyModal: React.FC<JobApplyModalProps> = ({ job, isOpen = true
 
               <div className="pt-2 flex items-center justify-between border-t border-slate-100">
                 <span className="text-[11px] text-slate-500">
-                  Direct submission to aravindjinna1@gmail.com
+                  Direct submission to parvisaandcareer94@gmail.com
                 </span>
                 <button
                   type="submit"

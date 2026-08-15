@@ -86,7 +86,7 @@ export const AdminDashboardPage: React.FC = () => {
         <ShieldCheck className="w-12 h-12 text-red-500 mx-auto" />
         <h2 className="text-xl font-bold text-slate-900">Access Denied</h2>
         <p className="text-slate-600 text-xs">
-          You do not have administrative privileges. Admin access requires allow-list OTP verification (<span className="font-semibold text-blue-700">aravindjinna1@gmail.com</span>).
+          You do not have administrative privileges. Admin access requires allow-list OTP verification (<span className="font-semibold text-blue-700">parvisaandcareer94@gmail.com</span>).
         </p>
       </div>
     );

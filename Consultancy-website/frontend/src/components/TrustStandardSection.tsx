@@ -30,7 +30,7 @@ export const TrustStandardSection: React.FC<TrustStandardSectionProps> = ({ onOp
     },
     {
       title: 'Prompt Concern Resolution Protocol',
-      desc: 'Escalate any query directly to senior management (+91 8106023616 / aravindjinna1@gmail.com) with guaranteed 24-hour response.',
+      desc: 'Escalate any query directly to senior management (+91 8019021039 / parvisaandcareer94@gmail.com) with guaranteed 24-hour response.',
       icon: FileText
     }
   ];
@@ -46,7 +46,7 @@ export const TrustStandardSection: React.FC<TrustStandardSectionProps> = ({ onOp
     },
     {
       q: 'Can I verify the status of my application anytime?',
-      a: 'Yes! Our candidates can contact their assigned counselor at +91 8106023616 or log into our dashboard to view real-time document tracking.'
+      a: 'Yes! Our candidates can contact their assigned counselor at +91 8019021039 or log into our dashboard to view real-time document tracking.'
     }
   ];
 
@@ -99,11 +99,11 @@ export const TrustStandardSection: React.FC<TrustStandardSectionProps> = ({ onOp
             <div className="pt-4 mt-4 border-t border-white/10">
               <div className="text-xs text-sky-200 mb-2">Direct Phone / WhatsApp:</div>
               <a
-                href="tel:+918106023616"
+                href="tel:+918019021039"
                 className="font-extrabold text-white text-base hover:text-sky-300 transition-colors flex items-center space-x-2"
               >
                 <PhoneCall className="w-4 h-4 text-emerald-400" />
-                <span>+91 8106023616</span>
+                <span>+91 8019021039</span>
               </a>
             </div>
           </div>

@@ -13,10 +13,26 @@ const app = express();
 const PORT = 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'par_careers_jwt_secret_key_2026';
 
-const DEFAULT_ADMIN_EMAILS = ['ardigitalstudio05@gmail.com', 'aravindjinna1@gmail.com', 'aravindjinna2006@gmail.com'];
-const ADMIN_ALLOWLIST = (process.env.ADMIN_ALLOWLIST || 'Ardigitalstudio05@gmail.com,aravindjinna1@gmail.com,aravindjinna2006@gmail.com')
-  .split(',')
-  .map(e => e.trim().toLowerCase());
+const DEFAULT_ADMIN_EMAILS = [
+  'parvisaandcareer94@gmail.com',
+  'aravindjinna1@gmail.com',
+  'aravindjinna2006@gmail.com'
+];
+
+const getAdminAllowList = (): string[] => {
+  const envList = (process.env.ADMIN_ALLOWLIST || '')
+    .split(',')
+    .map(e => e.trim().toLowerCase())
+    .filter(Boolean);
+  return Array.from(new Set([...DEFAULT_ADMIN_EMAILS, ...envList]));
+};
+
+const isAuthorizedAdminEmail = (email?: string | null): boolean => {
+  if (!email) return false;
+  const clean = email.trim().toLowerCase();
+  const allowList = getAdminAllowList();
+  return allowList.includes(clean);
+};
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://aravindjinna1_db_user:kK4yruY5uVoCi6HH@ac-svenujr-shard-00-00.mriykpc.mongodb.net:27017,ac-svenujr-shard-00-01.mriykpc.mongodb.net:27017,ac-svenujr-shard-00-02.mriykpc.mongodb.net:27017/?ssl=true&replicaSet=atlas-n7jjjo-shard-0&authSource=admin&appName=Cluster0';
 let currentMongoUri = MONGODB_URI;
@@ -88,14 +104,14 @@ async function seedInitialData() {
     console.log(`✅ Successfully seeded ${INITIAL_COUNTRIES.length} Country Pathways into MongoDB`);
 
     // Ensure default admin user exists
-    const adminEmail = 'ardigitalstudio05@gmail.com';
+    const adminEmail = 'parvisaandcareer94@gmail.com';
     const existingAdmin = await UserModel.findOne({ email: adminEmail }).catch(() => null);
     if (!existingAdmin) {
       const hashedPassword = await bcrypt.hash('Admin@2026!', 10);
       await UserModel.create({
-        name: 'AR Digital Studio (Admin)',
+        name: 'PAR Careers (Admin)',
         email: adminEmail,
-        phone: '+91 95331 20230',
+        phone: '+91 8019021039',
         password: hashedPassword,
         role: 'admin'
       }).catch(() => {});
@@ -118,7 +134,7 @@ const adminOtps = new Map<string, { code: string; expires: number }>();
 
 // Transporter for Gmail SMTP
 const createEmailTransporter = () => {
-  const smtpUser = process.env.SMTP_USER || 'Ardigitalstudio05@gmail.com';
+  const smtpUser = process.env.SMTP_USER || 'parvisaandcareer94@gmail.com';
   const smtpPass = process.env.SMTP_PASS || 'uslagjdwzcrkwcgh';
 
   if (smtpPass && smtpPass.trim() !== '') {
@@ -136,12 +152,12 @@ const createEmailTransporter = () => {
 // Helper function to send notification emails
 const sendAdminNotificationEmail = async (subject: string, htmlContent: string) => {
   const transporter = createEmailTransporter();
-  const recipient = 'Ardigitalstudio05@gmail.com';
+  const recipient = 'parvisaandcareer94@gmail.com';
 
   if (transporter) {
     try {
       await transporter.sendMail({
-        from: `"PAR CAREERS Portal" <${process.env.SMTP_USER || 'Ardigitalstudio05@gmail.com'}>`,
+        from: `"PAR CAREERS Portal" <${process.env.SMTP_USER || 'parvisaandcareer94@gmail.com'}>`,
         to: recipient,
         subject: subject,
         html: htmlContent
@@ -180,7 +196,7 @@ const authenticateToken = (req: AuthRequest, res: Response, next: NextFunction) 
 
 const requireAdmin = (req: AuthRequest, res: Response, next: NextFunction) => {
   authenticateToken(req, res, () => {
-    const isEmailAdmin = req.user?.email && ADMIN_ALLOWLIST.includes(req.user.email.toLowerCase());
+    const isEmailAdmin = isAuthorizedAdminEmail(req.user?.email);
     if (req.user?.role !== 'admin' && !isEmailAdmin) {
       return res.status(403).json({ success: false, message: 'Access denied. Administrative privileges required.' });
     }
@@ -229,7 +245,7 @@ app.post('/api/auth/register', async (req: Request, res: Response) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const role = ADMIN_ALLOWLIST.includes(cleanEmail) ? 'admin' : 'user';
+    const role = isAuthorizedAdminEmail(cleanEmail) ? 'admin' : 'user';
     const userId = `user_${Date.now()}`;
     const userDoc: any = {
       _id: userId,
@@ -317,7 +333,7 @@ app.post('/api/auth/login', async (req: Request, res: Response) => {
       return res.status(400).json({ success: false, message: 'Invalid email or password' });
     }
 
-    const userRole = ADMIN_ALLOWLIST.includes(cleanEmail) ? 'admin' : (user.role || 'user');
+    const userRole = isAuthorizedAdminEmail(cleanEmail) ? 'admin' : (user.role || 'user');
     user.role = userRole;
 
     const userId = user._id ? user._id.toString() : (user.id || `user_${Date.now()}`);
@@ -355,7 +371,7 @@ app.post('/api/admin/request-otp', async (req: Request, res: Response) => {
 
     const cleanEmail = email.trim().toLowerCase();
 
-    if (!ADMIN_ALLOWLIST.includes(cleanEmail)) {
+    if (!isAuthorizedAdminEmail(cleanEmail)) {
       return res.status(403).json({
         success: false,
         message: 'Access Denied: This email address is not present in the administrator allow-list.'
@@ -373,7 +389,7 @@ app.post('/api/admin/request-otp', async (req: Request, res: Response) => {
     if (transporter) {
       try {
         await transporter.sendMail({
-          from: `"PAR CAREERS Admin Portal" <${process.env.SMTP_USER || 'Ardigitalstudio05@gmail.com'}>`,
+          from: `"PAR CAREERS Admin Portal" <${process.env.SMTP_USER || 'parvisaandcareer94@gmail.com'}>`,
           to: cleanEmail,
           subject: 'Your PAR CAREERS Admin Login OTP',
           html: `
@@ -385,7 +401,7 @@ app.post('/api/admin/request-otp', async (req: Request, res: Response) => {
               </div>
               <p>This One-Time Password (OTP) is valid for 10 minutes. Do not share this code with anyone.</p>
               <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
-              <p style="font-size: 12px; color: #64748b;">PAR CAREERS AND VISA CONSULTANCY SERVICES | Phone: +91 95331 20230</p>
+              <p style="font-size: 12px; color: #64748b;">PAR CAREERS AND VISA CONSULTANCY SERVICES | Phone: +91 8019021039</p>
             </div>
           `
         });
@@ -434,17 +450,17 @@ app.post('/api/admin/verify-otp', async (req: Request, res: Response) => {
     adminOtps.delete(cleanEmail);
 
     let adminUserId = `admin-${Date.now()}`;
-    let adminName = 'Aravind Jinna (Admin)';
-    let adminPhone = '+91 95331 20230';
+    let adminName = 'PAR Careers (Admin)';
+    let adminPhone = '+91 8019021039';
 
     try {
       let adminUser = await UserModel.findOne({ email: cleanEmail });
       if (!adminUser) {
         const defaultPass = await bcrypt.hash('Admin@2026!', 10);
         adminUser = await UserModel.create({
-          name: 'Aravind Jinna (Admin)',
+          name: 'PAR Careers (Admin)',
           email: cleanEmail,
-          phone: '+91 95331 20230',
+          phone: '+91 8019021039',
           password: defaultPass,
           role: 'admin'
         });
@@ -1099,7 +1115,7 @@ async function startServer() {
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`=================================================`);
     console.log(`🚀 PAR CAREERS Consultancy Server running at http://0.0.0.0:${PORT}`);
-    console.log(`👑 Admin Email Allow-list: ${ADMIN_ALLOWLIST.join(', ')}`);
+    console.log(`👑 Admin Email Allow-list: ${getAdminAllowList().join(', ')}`);
     console.log(`=================================================`);
   });
 }

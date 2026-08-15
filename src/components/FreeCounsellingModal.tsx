@@ -77,7 +77,7 @@ export const FreeCounsellingModal: React.FC<FreeCounsellingModalProps> = ({
             </div>
             <h2 className="text-2xl font-bold tracking-tight">Get Free Profile Assessment</h2>
             <p className="text-sky-100 text-xs sm:text-sm mt-1">
-              Speak directly with certified visa specialists at PAR CAREERS (+91 8106023616)
+              Speak directly with certified visa specialists at PAR CAREERS (+91 8019021039)
             </p>
           </div>
           <button
@@ -97,13 +97,13 @@ export const FreeCounsellingModal: React.FC<FreeCounsellingModalProps> = ({
               </div>
               <h3 className="text-xl font-bold text-slate-900">Application Received!</h3>
               <p className="text-slate-600 text-sm max-w-md mx-auto leading-relaxed">
-                Thank you, <strong className="text-slate-900">{formData.fullName}</strong>. Your assessment profile has been registered and sent directly to our senior consultancy team (<span className="text-blue-700 font-medium">aravindjinna1@gmail.com</span>).
+                Thank you, <strong className="text-slate-900">{formData.fullName}</strong>. Your assessment profile has been registered and sent directly to our senior consultancy team (<span className="text-blue-700 font-medium">parvisaandcareer94@gmail.com</span>).
               </p>
               <div className="bg-sky-50 border border-sky-100 rounded-xl p-4 text-xs text-sky-900 max-w-md mx-auto flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-sky-600 flex-shrink-0" />
                 <div className="text-left">
                   <div className="font-bold">Need Immediate Assistance?</div>
-                  <div>Call or WhatsApp us directly at <a href="tel:+918106023616" className="font-bold underline">+91 8106023616</a>.</div>
+                  <div>Call or WhatsApp us directly at <a href="tel:+918019021039" className="font-bold underline">+91 8019021039</a>.</div>
                 </div>
               </div>
               <button
@@ -130,7 +130,7 @@ export const FreeCounsellingModal: React.FC<FreeCounsellingModalProps> = ({
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Aravind Jinna"
+                    placeholder="e.g. Rahul Sharma"
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                     className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm text-slate-900 focus:outline-none focus:bg-white focus:border-blue-600 transition-colors"
@@ -158,7 +158,7 @@ export const FreeCounsellingModal: React.FC<FreeCounsellingModalProps> = ({
                   <input
                     type="tel"
                     required
-                    placeholder="+91 8106023616"
+                    placeholder="+91 8019021039"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm text-slate-900 focus:outline-none focus:bg-white focus:border-blue-600 transition-colors"
