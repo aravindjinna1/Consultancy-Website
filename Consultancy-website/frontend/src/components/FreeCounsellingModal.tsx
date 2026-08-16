@@ -130,7 +130,7 @@ export const FreeCounsellingModal: React.FC<FreeCounsellingModalProps> = ({
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Aravind Jinna"
+                    placeholder="e.g. Ravi Yadav"
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                     className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm text-slate-900 focus:outline-none focus:bg-white focus:border-blue-600 transition-colors"

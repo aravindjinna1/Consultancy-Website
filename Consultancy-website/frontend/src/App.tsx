@@ -25,10 +25,20 @@ import { AdminDashboardPage } from './pages/AdminDashboardPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 import { INITIAL_COUNTRIES } from './data/initialData';
-import { Job, Blog } from './types';
+import { Job, Blog, CountryInfo } from './types';
+import { fetchCountries } from './services/api';
 
 export function App() {
   const [activeTab, setActiveTab] = useState<string>('home');
+  const [countriesList, setCountriesList] = useState<CountryInfo[]>(INITIAL_COUNTRIES);
+
+  useEffect(() => {
+    fetchCountries().then(res => {
+      if (res?.data?.length > 0) {
+        setCountriesList(res.data);
+      }
+    }).catch(() => {});
+  }, []);
 
   // Modals
   const [isCounsellingOpen, setIsCounsellingOpen] = useState(false);
@@ -111,7 +121,7 @@ export function App() {
 
     if (activeTab?.startsWith('country-')) {
       const countryId = activeTab.replace('country-', '');
-      const countryData = INITIAL_COUNTRIES.find(c => c.id === countryId);
+      const countryData = countriesList.find(c => c.id === countryId) || INITIAL_COUNTRIES.find(c => c.id === countryId);
       if (countryData) {
         return (
           <CountryDetailPage

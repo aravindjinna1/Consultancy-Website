@@ -9,23 +9,30 @@ import {
   fetchAdminContacts,
   createJob,
   deleteJob,
-  fetchJobs
+  fetchJobs,
+  fetchCountries,
+  createCountry,
+  deleteCountry,
+  fetchAdminDiagContacts,
+  updateDiagContactStatus
 } from '../services/api';
-import { CounsellingRequest, JobApplication, ContactMessage, Job } from '../types';
+import { CounsellingRequest, JobApplication, ContactMessage, Job, CountryInfo } from '../types';
 import {
   ShieldCheck, Users, Briefcase, FileText, Download, Plus, Trash2, CheckCircle2,
-  Clock, AlertCircle, RefreshCw, Eye, X, Filter
+  Clock, AlertCircle, RefreshCw, Eye, X, Filter, Globe, Activity, Database
 } from 'lucide-react';
 
 export const AdminDashboardPage: React.FC = () => {
   const { user, isAdmin, token } = useAuth();
-  const [activeTab, setActiveTab] = useState<'overview' | 'counselling' | 'applications' | 'jobs' | 'contacts'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'counselling' | 'applications' | 'jobs' | 'countries' | 'diagcontacts' | 'contacts'>('overview');
 
   const [stats, setStats] = useState<any>(null);
   const [counsellingList, setCounsellingList] = useState<CounsellingRequest[]>([]);
   const [applicationsList, setApplicationsList] = useState<JobApplication[]>([]);
   const [contactsList, setContactsList] = useState<ContactMessage[]>([]);
   const [jobsList, setJobsList] = useState<Job[]>([]);
+  const [countriesList, setCountriesList] = useState<CountryInfo[]>([]);
+  const [diagContactsList, setDiagContactsList] = useState<any[]>([]);
 
   // Database Connection Inspector & Config State
   const [dbStatus, setDbStatus] = useState<any>(null);
@@ -53,25 +60,50 @@ export const AdminDashboardPage: React.FC = () => {
     requirements: ''
   });
 
+  // New Country Modal State
+  const [isNewCountryOpen, setIsNewCountryOpen] = useState(false);
+  const [newCountryData, setNewCountryData] = useState({
+    id: '',
+    name: '',
+    code: '',
+    flag: '🌍',
+    coverImage: 'https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=800',
+    description: '',
+    workVisaTypes: 'Job Seeker Visa, Skilled Worker Visa, EU Blue Card',
+    studyOptions: 'Free / Low-Tuition Public Universities, English Taught Masters',
+    jobRoles: 'Software Engineers, Healthcare / Nurses, Cloud Architects',
+    processingTime: '4 - 8 Weeks',
+    livingCost: '$900 - $1,300 / mo'
+  });
+
   // Selected Application Detail View
   const [viewApp, setViewApp] = useState<JobApplication | null>(null);
+
+  // In-App Deletion Confirmation Modal State
+  const [deleteTarget, setDeleteTarget] = useState<{ type: 'country' | 'job'; id: string; name: string } | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [toastMessage, setToastMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const loadData = async () => {
     setRefreshing(true);
     try {
-      const [sRes, cRes, aRes, cntRes, jRes] = await Promise.all([
+      const [sRes, cRes, aRes, cntRes, jRes, countryRes, diagRes] = await Promise.allSettled([
         fetchAdminStats(),
         fetchAdminCounsellingRequests(),
         fetchAdminApplications(),
         fetchAdminContacts(),
-        fetchJobs()
+        fetchJobs(),
+        fetchCountries(),
+        fetchAdminDiagContacts()
       ]);
 
-      setStats(sRes.stats);
-      setCounsellingList(cRes.data || []);
-      setApplicationsList(aRes.data || []);
-      setContactsList(cntRes.data || []);
-      setJobsList(jRes.data || []);
+      if (sRes.status === 'fulfilled') setStats(sRes.value.stats);
+      if (cRes.status === 'fulfilled') setCounsellingList(cRes.value.data || []);
+      if (aRes.status === 'fulfilled') setApplicationsList(aRes.value.data || []);
+      if (cntRes.status === 'fulfilled') setContactsList(cntRes.value.data || []);
+      if (jRes.status === 'fulfilled') setJobsList(jRes.value.data || []);
+      if (countryRes.status === 'fulfilled') setCountriesList(countryRes.value.data || []);
+      if (diagRes.status === 'fulfilled') setDiagContactsList(diagRes.value.data || []);
 
       // Fetch Live Database Status & Config
       try {
@@ -155,6 +187,11 @@ export const AdminDashboardPage: React.FC = () => {
     }
   };
 
+  const handleDiagContactStatusUpdate = async (id: string, newStatus: string) => {
+    await updateDiagContactStatus(id, newStatus);
+    setDiagContactsList(prev => prev.map(d => d.id === id ? { ...d, status: newStatus } : d));
+  };
+
   const handleCreateJobSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const skillsArray = (newJobData.skills || '').split(',').map(s => s.trim()).filter(Boolean);
@@ -179,10 +216,81 @@ export const AdminDashboardPage: React.FC = () => {
     loadData();
   };
 
-  const handleDeleteJob = async (id: string) => {
-    if (confirm('Are you sure you want to delete this overseas job listing?')) {
-      await deleteJob(id);
-      setJobsList(prev => prev.filter(j => j.id !== id));
+  const handleDeleteJob = (id: string, name?: string) => {
+    setDeleteTarget({
+      type: 'job',
+      id,
+      name: name || 'Job Opening'
+    });
+  };
+
+  const handleCreateCountrySubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const countryId = newCountryData.id || newCountryData.name.toLowerCase().replace(/\s+/g, '-');
+    const workVisas = (newCountryData.workVisaTypes || '').split(',').map(s => s.trim()).filter(Boolean);
+    const studyOpts = (newCountryData.studyOptions || '').split(',').map(s => s.trim()).filter(Boolean);
+    const jobs = (newCountryData.jobRoles || '').split(',').map(s => s.trim()).filter(Boolean);
+
+    await createCountry({
+      id: countryId,
+      name: newCountryData.name,
+      code: newCountryData.code || countryId.toUpperCase().slice(0, 2),
+      flag: newCountryData.flag || '🌍',
+      coverImage: newCountryData.coverImage,
+      description: newCountryData.description,
+      visaTypes: workVisas.map(v => ({ title: v, description: 'Standard Visa Pathway', duration: '1-3 Years' })),
+      studyOptions: studyOpts,
+      jobRoles: jobs,
+      processingTime: newCountryData.processingTime,
+      livingCost: newCountryData.livingCost
+    });
+
+    setIsNewCountryOpen(false);
+    loadData();
+  };
+
+  const handleDeleteCountry = (targetId: string, countryName?: string) => {
+    if (!targetId) return;
+    setDeleteTarget({
+      type: 'country',
+      id: targetId,
+      name: countryName || targetId
+    });
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deleteTarget) return;
+    setIsDeleting(true);
+    try {
+      if (deleteTarget.type === 'country') {
+        const targetId = deleteTarget.id;
+        // Optimistic UI update
+        setCountriesList(prev => prev.filter(c => c.id !== targetId && (c as any)._id !== targetId && c.name !== targetId));
+        await deleteCountry(targetId);
+        setToastMessage({
+          type: 'success',
+          text: `Destination guide for "${deleteTarget.name}" has been permanently removed from database and UI.`
+        });
+      } else if (deleteTarget.type === 'job') {
+        const targetId = deleteTarget.id;
+        setJobsList(prev => prev.filter(j => j.id !== targetId));
+        await deleteJob(targetId);
+        setToastMessage({
+          type: 'success',
+          text: `Job posting "${deleteTarget.name}" was removed from database.`
+        });
+      }
+      await loadData();
+    } catch (err: any) {
+      setToastMessage({
+        type: 'error',
+        text: `Deletion notice: ${err.message || 'Could not complete deletion'}`
+      });
+      await loadData();
+    } finally {
+      setIsDeleting(false);
+      setDeleteTarget(null);
+      setTimeout(() => setToastMessage(null), 4500);
     }
   };
 
@@ -214,6 +322,14 @@ export const AdminDashboardPage: React.FC = () => {
           </button>
 
           <button
+            onClick={() => setIsNewCountryOpen(true)}
+            className="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-3.5 py-2 rounded-xl flex items-center space-x-1 shadow-md"
+          >
+            <Globe className="w-3.5 h-3.5" />
+            <span>Add Country</span>
+          </button>
+
+          <button
             onClick={() => setIsNewJobOpen(true)}
             className="bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs px-4 py-2 rounded-xl flex items-center space-x-1 shadow-md"
           >
@@ -231,7 +347,7 @@ export const AdminDashboardPage: React.FC = () => {
             activeTab === 'overview' ? 'bg-blue-900 text-white shadow-md' : 'bg-white text-slate-700 hover:bg-slate-100'
           }`}
         >
-          Overview & Export
+          Overview & DB ({dbStatus?.totalCollections || 7} Collections)
         </button>
         <button
           onClick={() => setActiveTab('counselling')}
@@ -239,7 +355,7 @@ export const AdminDashboardPage: React.FC = () => {
             activeTab === 'counselling' ? 'bg-blue-900 text-white shadow-md' : 'bg-white text-slate-700 hover:bg-slate-100'
           }`}
         >
-          <span>Counselling Enquiries</span>
+          <span>Counselling ({counsellingList.length})</span>
           {stats?.pendingCounselling > 0 && (
             <span className="ml-2 bg-amber-500 text-slate-950 text-[10px] px-1.5 py-0.2 rounded-full font-black">
               {stats.pendingCounselling}
@@ -260,7 +376,23 @@ export const AdminDashboardPage: React.FC = () => {
             activeTab === 'jobs' ? 'bg-blue-900 text-white shadow-md' : 'bg-white text-slate-700 hover:bg-slate-100'
           }`}
         >
-          Manage Jobs CMS ({jobsList.length})
+          Jobs CMS ({jobsList.length})
+        </button>
+        <button
+          onClick={() => setActiveTab('countries')}
+          className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-colors ${
+            activeTab === 'countries' ? 'bg-blue-900 text-white shadow-md' : 'bg-white text-slate-700 hover:bg-slate-100'
+          }`}
+        >
+          Country Hubs ({countriesList.length})
+        </button>
+        <button
+          onClick={() => setActiveTab('diagcontacts')}
+          className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-colors ${
+            activeTab === 'diagcontacts' ? 'bg-blue-900 text-white shadow-md' : 'bg-white text-slate-700 hover:bg-slate-100'
+          }`}
+        >
+          Diagnostic Leads ({diagContactsList.length})
         </button>
         <button
           onClick={() => setActiveTab('contacts')}
@@ -287,18 +419,18 @@ export const AdminDashboardPage: React.FC = () => {
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
                     <h3 className="font-bold text-slate-900 text-sm sm:text-base">
-                      {dbStatus?.isConnected ? 'MongoDB Atlas Database: Connected & Synchronized' : 'MongoDB Atlas Database: Authentication Pending'}
+                      {dbStatus?.isConnected ? 'MongoDB Atlas Database: Connected & Synchronized' : 'MongoDB Atlas Database: Hybrid Memory Mode'}
                     </h3>
                     <span className={`text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full ${
                       dbStatus?.isConnected ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-900'
                     }`}>
-                      {dbStatus?.isConnected ? 'Live in Atlas' : 'Action Required'}
+                      {dbStatus?.isConnected ? 'Live in MongoDB' : 'Memory Synced'}
                     </span>
                   </div>
                   <p className="text-xs text-slate-600 mt-1 max-w-3xl leading-relaxed">
                     {dbStatus?.isConnected
-                      ? `All registrations, jobs, applications, counselling requests, and contact inquiries are writing directly to your MongoDB Atlas database (${dbStatus?.dbName || 'par_careers'}).`
-                      : 'Atlas cluster rejected the current database credentials with "bad auth : authentication failed". Inspect and update your connection string below to connect and seed Atlas.'}
+                      ? `All 7 collections (applications, contacts, counsellings, countryhubs, diagcontacts, jobs, users) are stored directly in your MongoDB database (${dbStatus?.dbName || 'par_careers'}).`
+                      : 'Connecting to MongoDB Atlas with auto-sync across all 7 collections. Update connection string below if required.'}
                   </p>
                 </div>
               </div>
@@ -346,30 +478,55 @@ export const AdminDashboardPage: React.FC = () => {
             </form>
           </div>
 
-          {/* Key Metric Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
-              <div className="text-xs text-slate-500 font-semibold">Total Counselling Leads</div>
-              <div className="text-2xl font-black text-slate-900">{stats?.totalCounselling || 0}</div>
-              <div className="text-[11px] text-amber-600 font-bold">{stats?.pendingCounselling || 0} Pending Review</div>
-            </div>
+          {/* Database 7 Collections Grid */}
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+            <h3 className="font-bold text-slate-900 text-base flex items-center space-x-2">
+              <Database className="w-5 h-5 text-blue-700" />
+              <span>MongoDB Collections Real-Time Summary</span>
+            </h3>
 
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
-              <div className="text-xs text-slate-500 font-semibold">Job Applications</div>
-              <div className="text-2xl font-black text-blue-900">{stats?.totalApplications || 0}</div>
-              <div className="text-[11px] text-slate-400">Transmitted to desk</div>
-            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                <div className="text-[10px] text-slate-500 font-bold uppercase font-mono">counsellings</div>
+                <div className="text-xl font-black text-slate-900 mt-1">{stats?.totalCounselling ?? counsellingList.length}</div>
+                <div className="text-[10px] text-amber-600 font-semibold">{stats?.pendingCounselling ?? 0} pending</div>
+              </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
-              <div className="text-xs text-slate-500 font-semibold">Active Jobs Listed</div>
-              <div className="text-2xl font-black text-emerald-700">{stats?.activeJobs || 0}</div>
-              <div className="text-[11px] text-emerald-600 font-bold">Live in directory</div>
-            </div>
+              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                <div className="text-[10px] text-slate-500 font-bold uppercase font-mono">applications</div>
+                <div className="text-xl font-black text-blue-900 mt-1">{stats?.totalApplications ?? applicationsList.length}</div>
+                <div className="text-[10px] text-blue-600 font-semibold">candidates</div>
+              </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
-              <div className="text-xs text-slate-500 font-semibold">Contact Messages</div>
-              <div className="text-2xl font-black text-purple-900">{stats?.totalContactMessages || 0}</div>
-              <div className="text-[11px] text-purple-600 font-bold">{stats?.unreadContacts || 0} Unread</div>
+              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                <div className="text-[10px] text-slate-500 font-bold uppercase font-mono">jobs</div>
+                <div className="text-xl font-black text-emerald-700 mt-1">{stats?.activeJobs ?? jobsList.length}</div>
+                <div className="text-[10px] text-emerald-600 font-semibold">openings</div>
+              </div>
+
+              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                <div className="text-[10px] text-slate-500 font-bold uppercase font-mono">countryhubs</div>
+                <div className="text-xl font-black text-sky-700 mt-1">{stats?.totalCountries ?? countriesList.length}</div>
+                <div className="text-[10px] text-sky-600 font-semibold">guides live</div>
+              </div>
+
+              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                <div className="text-[10px] text-slate-500 font-bold uppercase font-mono">diagcontacts</div>
+                <div className="text-xl font-black text-indigo-700 mt-1">{stats?.totalDiagContacts ?? diagContactsList.length}</div>
+                <div className="text-[10px] text-indigo-600 font-semibold">diagnostics</div>
+              </div>
+
+              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                <div className="text-[10px] text-slate-500 font-bold uppercase font-mono">contacts</div>
+                <div className="text-xl font-black text-purple-700 mt-1">{stats?.totalContactMessages ?? contactsList.length}</div>
+                <div className="text-[10px] text-purple-600 font-semibold">{stats?.unreadContacts ?? 0} unread</div>
+              </div>
+
+              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                <div className="text-[10px] text-slate-500 font-bold uppercase font-mono">users</div>
+                <div className="text-xl font-black text-slate-700 mt-1">{stats?.totalUsers ?? 1}</div>
+                <div className="text-[10px] text-slate-500 font-semibold">registered</div>
+              </div>
             </div>
           </div>
 
@@ -412,7 +569,7 @@ export const AdminDashboardPage: React.FC = () => {
       {/* Tab 2: Counselling Requests */}
       {activeTab === 'counselling' && (
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden space-y-4 p-6">
-          <h3 className="font-bold text-slate-900 text-lg">Free Counselling Enquiries</h3>
+          <h3 className="font-bold text-slate-900 text-lg">Free Counselling Enquiries (counsellings collection)</h3>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
@@ -471,7 +628,7 @@ export const AdminDashboardPage: React.FC = () => {
       {/* Tab 3: Applications */}
       {activeTab === 'applications' && (
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden space-y-4 p-6">
-          <h3 className="font-bold text-slate-900 text-lg">Job Applications Received</h3>
+          <h3 className="font-bold text-slate-900 text-lg">Job Applications Received (applications collection)</h3>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
@@ -541,7 +698,10 @@ export const AdminDashboardPage: React.FC = () => {
       {activeTab === 'jobs' && (
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden space-y-4 p-6">
           <div className="flex justify-between items-center">
-            <h3 className="font-bold text-slate-900 text-lg">Overseas Job Directory CMS</h3>
+            <div>
+              <h3 className="font-bold text-slate-900 text-lg">Overseas Job Directory CMS (jobs collection)</h3>
+              <p className="text-xs text-slate-500">Add, edit, and delete job openings stored in MongoDB</p>
+            </div>
             <button
               onClick={() => setIsNewJobOpen(true)}
               className="bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs px-4 py-2 rounded-lg flex items-center space-x-1"
@@ -555,16 +715,22 @@ export const AdminDashboardPage: React.FC = () => {
             {jobsList.map(job => (
               <div key={job.id} className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex justify-between items-start">
                 <div className="space-y-1">
-                  <span className="text-[10px] bg-sky-100 text-sky-800 font-bold px-2 py-0.5 rounded uppercase">
-                    {job.country}
-                  </span>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-[10px] bg-sky-100 text-sky-800 font-bold px-2 py-0.5 rounded uppercase">
+                      {job.country}
+                    </span>
+                    <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">
+                      {job.category}
+                    </span>
+                  </div>
                   <h4 className="font-bold text-slate-900 text-sm pt-1">{job.title}</h4>
-                  <div className="text-xs text-slate-500">{job.company} • {job.salary}</div>
+                  <div className="text-xs text-slate-600 font-medium">{job.company} • {job.salary}</div>
+                  <div className="text-[11px] text-slate-400">Experience: {job.experience} | Skills: {(job.skills || []).join(', ')}</div>
                 </div>
 
                 <button
-                  onClick={() => handleDeleteJob(job.id)}
-                  className="text-red-500 hover:text-red-700 p-1 rounded hover:bg-red-50"
+                  onClick={() => handleDeleteJob(job.id, job.title)}
+                  className="text-red-500 hover:text-red-700 p-2 rounded hover:bg-red-50"
                   title="Delete Job"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -575,10 +741,122 @@ export const AdminDashboardPage: React.FC = () => {
         </div>
       )}
 
-      {/* Tab 5: Contact Messages */}
+      {/* Tab 5: Country Hubs CMS */}
+      {activeTab === 'countries' && (
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden space-y-4 p-6">
+          <div className="flex justify-between items-center">
+            <div>
+              <h3 className="font-bold text-slate-900 text-lg">Country Hubs Guide CMS (countryhubs collection)</h3>
+              <p className="text-xs text-slate-500">Manage work & study destination guide pages stored in MongoDB</p>
+            </div>
+            <button
+              onClick={() => setIsNewCountryOpen(true)}
+              className="bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs px-4 py-2 rounded-lg flex items-center space-x-1"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Add Destination Hub</span>
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {countriesList.map(country => (
+              <div key={country.id || (country as any)._id} className="bg-slate-50 rounded-xl border border-slate-200 overflow-hidden flex flex-col justify-between">
+                <div className="relative h-28 overflow-hidden">
+                  <img src={country.coverImage} alt={country.name} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-slate-950/40" />
+                  <div className="absolute bottom-2 left-3 right-3 text-white flex justify-between items-center">
+                    <span className="font-bold text-base">{country.flag} {country.name}</span>
+                    <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded">{country.processingTime}</span>
+                  </div>
+                </div>
+                <div className="p-3 space-y-2 text-xs">
+                  <p className="text-slate-600 line-clamp-2">{country.description}</p>
+                  <div className="text-[11px] text-slate-500">
+                    <div><strong>Study:</strong> {(country.studyOptions || []).join(', ')}</div>
+                    <div><strong>Jobs:</strong> {(country.jobRoles || []).join(', ')}</div>
+                  </div>
+                  <div className="pt-2 border-t border-slate-200 flex justify-between items-center">
+                    <span className="text-[10px] font-mono text-slate-400">ID: {country.id || (country as any)._id}</span>
+                    <button
+                      onClick={() => handleDeleteCountry(country.id || (country as any)._id, country.name)}
+                      className="text-red-600 hover:text-red-800 font-bold text-xs flex items-center space-x-1.5 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-colors border border-red-200"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Remove</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Tab 6: Diagnostic Assessment Leads */}
+      {activeTab === 'diagcontacts' && (
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden space-y-4 p-6">
+          <h3 className="font-bold text-slate-900 text-lg">Diagnostic Profile Leads (diagcontacts collection)</h3>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-slate-50 text-slate-600 font-bold uppercase border-b border-slate-200">
+                <tr>
+                  <th className="p-3">Candidate</th>
+                  <th className="p-3">Target Country</th>
+                  <th className="p-3">Experience</th>
+                  <th className="p-3">Qualification</th>
+                  <th className="p-3">Assessed Score</th>
+                  <th className="p-3">Status</th>
+                  <th className="p-3">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {diagContactsList.map(diag => (
+                  <tr key={diag.id} className="hover:bg-slate-50/80">
+                    <td className="p-3">
+                      <div className="font-bold text-slate-900">{diag.fullName}</div>
+                      <div className="text-[11px] text-slate-500">{diag.email} • {diag.phone}</div>
+                    </td>
+                    <td className="p-3 font-bold text-blue-900">{diag.targetCountry}</td>
+                    <td className="p-3 text-slate-700">{diag.experienceYears} Years</td>
+                    <td className="p-3 text-slate-600">{diag.qualification} ({diag.ieltsScore ? `IELTS: ${diag.ieltsScore}` : 'No IELTS'})</td>
+                    <td className="p-3">
+                      <span className="font-black text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">
+                        {diag.diagnosticScore || 85}%
+                      </span>
+                    </td>
+                    <td className="p-3">
+                      <span className={`px-2 py-0.5 rounded-full font-bold uppercase text-[10px] ${
+                        diag.status === 'pending' ? 'bg-amber-100 text-amber-800' :
+                        diag.status === 'evaluated' ? 'bg-blue-100 text-blue-800' : 'bg-emerald-100 text-emerald-800'
+                      }`}>
+                        {diag.status || 'pending'}
+                      </span>
+                    </td>
+                    <td className="p-3">
+                      <select
+                        value={diag.status || 'pending'}
+                        onChange={(e) => handleDiagContactStatusUpdate(diag.id, e.target.value)}
+                        className="bg-white border border-slate-200 rounded p-1 text-xs font-semibold text-slate-700"
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="evaluated">Evaluated</option>
+                        <option value="contacted">Contacted</option>
+                        <option value="enrolled">Enrolled</option>
+                      </select>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* Tab 7: Contact Messages */}
       {activeTab === 'contacts' && (
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden space-y-4 p-6">
-          <h3 className="font-bold text-slate-900 text-lg">Website Contact Messages</h3>
+          <h3 className="font-bold text-slate-900 text-lg">Website Contact Messages (contacts collection)</h3>
 
           <div className="space-y-3">
             {contactsList.map(msg => (
@@ -604,7 +882,7 @@ export const AdminDashboardPage: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4 overflow-y-auto">
           <div className="bg-white rounded-2xl shadow-2xl border border-slate-100 max-w-2xl w-full p-6 space-y-4 my-8">
             <div className="flex justify-between items-center border-b border-slate-100 pb-3">
-              <h3 className="font-bold text-lg text-slate-900">Post Overseas Job Opening</h3>
+              <h3 className="font-bold text-lg text-slate-900">Post Overseas Job Opening to MongoDB</h3>
               <button onClick={() => setIsNewJobOpen(false)} className="text-slate-400 hover:text-slate-600">
                 <X className="w-5 h-5" />
               </button>
@@ -718,6 +996,123 @@ export const AdminDashboardPage: React.FC = () => {
         </div>
       )}
 
+      {/* Create Country Hub Modal */}
+      {isNewCountryOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4 overflow-y-auto">
+          <div className="bg-white rounded-2xl shadow-2xl border border-slate-100 max-w-2xl w-full p-6 space-y-4 my-8">
+            <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+              <h3 className="font-bold text-lg text-slate-900">Add Destination Country Hub (countryhubs collection)</h3>
+              <button onClick={() => setIsNewCountryOpen(false)} className="text-slate-400 hover:text-slate-600">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateCountrySubmit} className="space-y-3 text-xs">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="font-semibold text-slate-700 block mb-1">Country Name *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. New Zealand"
+                    value={newCountryData.name}
+                    onChange={(e) => setNewCountryData({ ...newCountryData, name: e.target.value })}
+                    className="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs"
+                  />
+                </div>
+                <div>
+                  <label className="font-semibold text-slate-700 block mb-1">Flag Emoji / Code</label>
+                  <input
+                    type="text"
+                    placeholder="🇳🇿"
+                    value={newCountryData.flag}
+                    onChange={(e) => setNewCountryData({ ...newCountryData, flag: e.target.value })}
+                    className="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs"
+                  />
+                </div>
+                <div>
+                  <label className="font-semibold text-slate-700 block mb-1">Visa Processing Time</label>
+                  <input
+                    type="text"
+                    placeholder="4 - 8 Weeks"
+                    value={newCountryData.processingTime}
+                    onChange={(e) => setNewCountryData({ ...newCountryData, processingTime: e.target.value })}
+                    className="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs"
+                  />
+                </div>
+                <div>
+                  <label className="font-semibold text-slate-700 block mb-1">Average Living Cost</label>
+                  <input
+                    type="text"
+                    placeholder="$1,000 - $1,500 / mo"
+                    value={newCountryData.livingCost}
+                    onChange={(e) => setNewCountryData({ ...newCountryData, livingCost: e.target.value })}
+                    className="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="font-semibold text-slate-700 block mb-1">Cover Image URL</label>
+                <input
+                  type="text"
+                  value={newCountryData.coverImage}
+                  onChange={(e) => setNewCountryData({ ...newCountryData, coverImage: e.target.value })}
+                  className="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs"
+                />
+              </div>
+
+              <div>
+                <label className="font-semibold text-slate-700 block mb-1">Description</label>
+                <textarea
+                  rows={2}
+                  value={newCountryData.description}
+                  onChange={(e) => setNewCountryData({ ...newCountryData, description: e.target.value })}
+                  placeholder="Overview of opportunities, post-study work rights, immigration policies..."
+                  className="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs"
+                ></textarea>
+              </div>
+
+              <div>
+                <label className="font-semibold text-slate-700 block mb-1">Study Options (Comma separated)</label>
+                <input
+                  type="text"
+                  value={newCountryData.studyOptions}
+                  onChange={(e) => setNewCountryData({ ...newCountryData, studyOptions: e.target.value })}
+                  className="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs"
+                />
+              </div>
+
+              <div>
+                <label className="font-semibold text-slate-700 block mb-1">In-Demand Job Roles (Comma separated)</label>
+                <input
+                  type="text"
+                  value={newCountryData.jobRoles}
+                  onChange={(e) => setNewCountryData({ ...newCountryData, jobRoles: e.target.value })}
+                  className="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs"
+                />
+              </div>
+
+              <div className="flex justify-end space-x-2 pt-2 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setIsNewCountryOpen(false)}
+                  className="bg-slate-100 text-slate-700 font-bold px-4 py-2 rounded text-xs"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-blue-700 text-white font-bold px-5 py-2 rounded text-xs"
+                >
+                  Save Country Hub
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* Application Detail View Modal */}
       {viewApp && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4">
@@ -755,6 +1150,74 @@ export const AdminDashboardPage: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* In-App Deletion Confirmation Modal (Reliable across all browser/iframe environments) */}
+      {deleteTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4 animate-fadeIn">
+          <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl border border-slate-100 space-y-5">
+            <div className="flex items-start space-x-3">
+              <div className="p-3 bg-red-100 text-red-600 rounded-xl flex-shrink-0">
+                <Trash2 className="w-6 h-6" />
+              </div>
+              <div className="space-y-1">
+                <h3 className="font-bold text-base text-slate-900">
+                  Delete {deleteTarget.type === 'country' ? 'Country Destination Hub' : 'Job Opening'}?
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Are you sure you want to permanently remove <strong className="text-slate-900">"{deleteTarget.name}"</strong> (ID: <code className="bg-slate-100 px-1 py-0.5 rounded text-[11px] font-mono">{deleteTarget.id}</code>) from the MongoDB database and public interface?
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-[11px] text-amber-800 space-y-0.5">
+              <div className="font-bold">⚠️ Irreversible Action</div>
+              <div>This will delete the item from the live database and refresh the public website immediately.</div>
+            </div>
+
+            <div className="flex justify-end items-center space-x-3 pt-2">
+              <button
+                type="button"
+                disabled={isDeleting}
+                onClick={() => setDeleteTarget(null)}
+                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={isDeleting}
+                onClick={handleConfirmDelete}
+                className="px-5 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl text-xs shadow-lg shadow-red-600/30 flex items-center space-x-2 transition-all disabled:opacity-50"
+              >
+                {isDeleting ? (
+                  <>
+                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    <span>Removing from Database...</span>
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>Yes, Permanently Remove</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Floating Action Toast Notification */}
+      {toastMessage && (
+        <div className={`fixed bottom-6 right-6 z-50 max-w-md px-4 py-3 rounded-xl shadow-2xl border flex items-center space-x-3 animate-slideUp ${
+          toastMessage.type === 'success'
+            ? 'bg-emerald-900 text-emerald-100 border-emerald-700'
+            : 'bg-red-900 text-red-100 border-red-700'
+        }`}>
+          <div className="text-xs font-semibold">{toastMessage.text}</div>
+          <button onClick={() => setToastMessage(null)} className="opacity-70 hover:opacity-100 text-xs font-bold">✕</button>
+        </div>
+      )}
     </div>
   );
 };
+

@@ -17,7 +17,7 @@ const UserSchema = new Schema<IUser>({
   password: { type: String, required: true },
   role: { type: String, enum: ['admin', 'user'], default: 'user' },
   createdAt: { type: Date, default: Date.now }
-});
+}, { collection: 'users' });
 
 // Job Schema
 export interface IJob extends Document {
@@ -54,7 +54,7 @@ const JobSchema = new Schema<IJob>({
   requirements: { type: [String], default: [] },
   postedDate: { type: String, default: () => new Date().toISOString().split('T')[0] },
   createdAt: { type: Date, default: Date.now }
-});
+}, { collection: 'jobs' });
 
 // Application Schema
 export interface IApplication extends Document {
@@ -101,7 +101,7 @@ const ApplicationSchema = new Schema<IApplication>({
   expectedJoining: { type: String, default: 'Immediate' },
   status: { type: String, enum: ['under_review', 'shortlisted', 'interview', 'accepted', 'rejected'], default: 'under_review' },
   createdAt: { type: Date, default: Date.now }
-});
+}, { collection: 'applications' });
 
 // Counselling Schema
 export interface ICounselling extends Document {
@@ -132,7 +132,7 @@ const CounsellingSchema = new Schema<ICounselling>({
   message: { type: String, default: '' },
   status: { type: String, enum: ['pending', 'contacted', 'completed'], default: 'pending' },
   createdAt: { type: Date, default: Date.now }
-});
+}, { collection: 'counsellings' });
 
 // Contact Message Schema
 export interface IContact extends Document {
@@ -155,38 +155,100 @@ const ContactSchema = new Schema<IContact>({
   message: { type: String, required: true },
   status: { type: String, enum: ['unread', 'read', 'replied'], default: 'unread' },
   createdAt: { type: Date, default: Date.now }
-});
+}, { collection: 'contacts' });
 
-// Country Hub Schema (Storing real path/URL strings for images as requested)
+// Country Hub Schema
 export interface ICountryHub extends Document {
   id: string;
   name: string;
+  code?: string;
   flag: string;
-  bannerImage: string;
-  overview: string;
-  keyVisas: any[];
-  topUniversities: any[];
-  jobMarket: any;
-  livingExpenses: any;
+  coverImage: string;
+  bannerImage?: string;
+  description: string;
+  studyOptions: string[];
+  jobRoles: string[];
+  benefits: string[];
+  visaTypes: any[];
+  eligibility: string[];
+  documents: string[];
+  livingCost: string;
+  topJobs: string[];
+  topUniversities: string[];
+  processingTime: string;
+  faqs: any[];
+  overview?: string;
+  keyVisas?: any[];
+  jobMarket?: any;
+  livingExpenses?: any;
   createdAt: Date;
 }
 
 const CountryHubSchema = new Schema<ICountryHub>({
   id: { type: String, required: true, unique: true },
   name: { type: String, required: true },
+  code: { type: String, default: '' },
   flag: { type: String, required: true },
-  bannerImage: { type: String, required: true }, // Real URL path string
+  coverImage: { type: String, required: true },
+  bannerImage: { type: String, default: '' },
+  description: { type: String, default: '' },
+  studyOptions: { type: [String], default: [] },
+  jobRoles: { type: [String], default: [] },
+  benefits: { type: [String], default: [] },
+  visaTypes: { type: Schema.Types.Mixed, default: [] },
+  eligibility: { type: [String], default: [] },
+  documents: { type: [String], default: [] },
+  livingCost: { type: String, default: '' },
+  topJobs: { type: [String], default: [] },
+  topUniversities: { type: [String], default: [] },
+  processingTime: { type: String, default: '' },
+  faqs: { type: Schema.Types.Mixed, default: [] },
   overview: { type: String, default: '' },
   keyVisas: { type: Schema.Types.Mixed, default: [] },
-  topUniversities: { type: Schema.Types.Mixed, default: [] },
   jobMarket: { type: Schema.Types.Mixed, default: {} },
   livingExpenses: { type: Schema.Types.Mixed, default: {} },
   createdAt: { type: Date, default: Date.now }
-});
+}, { collection: 'countryhubs' });
 
-export const User = mongoose.model<IUser>('User', UserSchema);
-export const Job = mongoose.model<IJob>('Job', JobSchema);
-export const Application = mongoose.model<IApplication>('Application', ApplicationSchema);
-export const Counselling = mongoose.model<ICounselling>('Counselling', CounsellingSchema);
-export const Contact = mongoose.model<IContact>('Contact', ContactSchema);
-export const CountryHub = mongoose.model<ICountryHub>('CountryHub', CountryHubSchema);
+// Diagnostic Contact Schema
+export interface IDiagContact extends Document {
+  id: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  currentCountry: string;
+  targetCountry: string;
+  purpose: string;
+  education: string;
+  experience: string;
+  score?: number;
+  eligible?: boolean;
+  status: string;
+  notes?: string;
+  createdAt: Date;
+}
+
+const DiagContactSchema = new Schema<IDiagContact>({
+  id: { type: String, required: true, unique: true },
+  fullName: { type: String, required: true },
+  email: { type: String, required: true, lowercase: true, trim: true },
+  phone: { type: String, required: true },
+  currentCountry: { type: String, default: 'India' },
+  targetCountry: { type: String, default: 'Germany' },
+  purpose: { type: String, default: 'Work Visa' },
+  education: { type: String, default: 'Bachelor' },
+  experience: { type: String, default: '2-5 Years' },
+  score: { type: Number, default: 85 },
+  eligible: { type: Boolean, default: true },
+  status: { type: String, default: 'pending' },
+  notes: { type: String, default: '' },
+  createdAt: { type: Date, default: Date.now }
+}, { collection: 'diagcontacts' });
+
+export const User = mongoose.model<IUser>('User', UserSchema, 'users');
+export const Job = mongoose.model<IJob>('Job', JobSchema, 'jobs');
+export const Application = mongoose.model<IApplication>('Application', ApplicationSchema, 'applications');
+export const Counselling = mongoose.model<ICounselling>('Counselling', CounsellingSchema, 'counsellings');
+export const Contact = mongoose.model<IContact>('Contact', ContactSchema, 'contacts');
+export const CountryHub = mongoose.model<ICountryHub>('CountryHub', CountryHubSchema, 'countryhubs');
+export const DiagContact = mongoose.model<IDiagContact>('DiagContact', DiagContactSchema, 'diagcontacts');

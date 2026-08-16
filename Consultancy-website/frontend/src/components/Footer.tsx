@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Phone, Mail, MessageSquare, MapPin, ShieldCheck, ArrowRight, CheckCircle2, Instagram, Linkedin } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import brandLogo from '../assets/logo.png';
 
 interface FooterProps {
   onNavClick: (tab: string) => void;
@@ -36,16 +37,21 @@ export const Footer: React.FC<FooterProps> = ({ onNavClick, onOpenAdminLogin }) 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-800">
           {/* Col 1: About Company */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center space-x-3 cursor-pointer" onClick={() => onNavClick('home')}>
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-600 to-sky-400 flex items-center justify-center text-white font-black text-xl shadow-lg">
-                P
-              </div>
+            <div className="flex items-center space-x-3 cursor-pointer group" onClick={() => onNavClick('home')}>
+              <img
+                src={brandLogo}
+                alt="PAR CAREERS Logo"
+                className="h-12 w-auto max-w-[150px] object-contain rounded-xl border-2 border-sky-400 shadow-xl shadow-sky-500/30 group-hover:scale-105 group-hover:border-sky-300 transition-all duration-300"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = '/logo.png';
+                }}
+              />
               <div>
-                <div className="font-extrabold text-lg text-white tracking-tight">
+                <div className="font-black text-lg text-white tracking-tight group-hover:text-sky-300 transition-colors">
                   PAR CAREERS
                 </div>
                 <div className="text-[10px] font-semibold uppercase tracking-wider text-sky-400">
-                  & Visa Consultancy Services
+                  &amp; Visa Consultancy Services
                 </div>
               </div>
             </div>

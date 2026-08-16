@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Phone, Mail, MessageSquare, ShieldCheck, User as UserIcon, Lock, Menu, X, ChevronDown, GraduationCap, Briefcase, Globe, Award, HelpCircle, Instagram, Linkedin, UserPlus, LogIn, LogOut } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import brandLogo from '../assets/logo.png';
 
 interface HeaderProps {
   currentTab?: string;
@@ -181,17 +182,24 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Brand Logo */}
         <div
           onClick={() => handleNavClick('home')}
-          className="cursor-pointer flex items-center space-x-2.5 group flex-shrink-0"
+          className="cursor-pointer flex items-center space-x-3 group flex-shrink-0"
         >
-          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-900 via-blue-800 to-sky-600 flex items-center justify-center text-white font-black text-lg shadow-md group-hover:scale-105 transition-transform">
-            P
+          <div className="relative flex items-center justify-center">
+            <img
+              src={brandLogo}
+              alt="PAR CAREERS Logo"
+              className="h-11 sm:h-12 w-auto max-w-[130px] sm:max-w-[150px] object-contain rounded-xl border-2 border-sky-400 shadow-lg shadow-sky-500/30 group-hover:scale-105 group-hover:shadow-sky-500/50 group-hover:border-sky-300 transition-all duration-300"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = '/logo.png';
+              }}
+            />
           </div>
-          <div className="whitespace-nowrap">
-            <div className="font-extrabold text-base sm:text-lg text-slate-900 leading-tight tracking-tight group-hover:text-blue-900 transition-colors">
+          <div className="whitespace-nowrap hidden sm:block">
+            <div className="font-black text-base sm:text-lg text-slate-900 leading-tight tracking-tight group-hover:text-blue-900 transition-colors">
               PAR CAREERS
             </div>
-            <div className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-sky-700">
-              & Visa Consultancy Services
+            <div className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-sky-700">
+              &amp; Visa Consultancy Services
             </div>
           </div>
         </div>

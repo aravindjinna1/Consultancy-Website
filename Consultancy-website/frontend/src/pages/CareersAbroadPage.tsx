@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { Search, Filter, Briefcase, MapPin, Building2, ShieldCheck, DollarSign, Calendar, ChevronRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Search, Filter, Briefcase, MapPin, Building2, ShieldCheck, DollarSign, Calendar, ChevronRight, Loader2, RefreshCw } from 'lucide-react';
 import { INITIAL_JOBS } from '../data/initialData';
 import { Job } from '../types';
+import { fetchJobs } from '../services/api';
 
 interface CareersAbroadPageProps {
   onSelectJob: (job: Job) => void;
@@ -9,6 +10,8 @@ interface CareersAbroadPageProps {
 }
 
 export const CareersAbroadPage: React.FC<CareersAbroadPageProps> = ({ onSelectJob, onOpenCounselling }) => {
+  const [jobs, setJobs] = useState<Job[]>(INITIAL_JOBS);
+  const [loading, setLoading] = useState<boolean>(true);
   const [selectedCountry, setSelectedCountry] = useState('All');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
@@ -16,8 +19,28 @@ export const CareersAbroadPage: React.FC<CareersAbroadPageProps> = ({ onSelectJo
   const countries = ['All', 'Germany', 'Singapore', 'Australia', 'United Kingdom', 'Canada', 'United States'];
   const categories = ['All', 'Information Technology', 'Cloud & Infrastructure', 'Healthcare & Nursing', 'Engineering', 'Data & Analytics', 'Artificial Intelligence'];
 
-  const filteredJobs = INITIAL_JOBS.filter(j => {
-    const matchesCountry = selectedCountry === 'All' || (j.country || '').toLowerCase() === selectedCountry.toLowerCase();
+  const loadJobs = async () => {
+    setLoading(true);
+    try {
+      const res = await fetchJobs();
+      if (res && res.data && res.data.length > 0) {
+        setJobs(res.data);
+      } else {
+        setJobs(INITIAL_JOBS);
+      }
+    } catch (e) {
+      setJobs(INITIAL_JOBS);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadJobs();
+  }, []);
+
+  const filteredJobs = jobs.filter(j => {
+    const matchesCountry = selectedCountry === 'All' || (j.country || '').toLowerCase().includes(selectedCountry.toLowerCase()) || selectedCountry.toLowerCase().includes((j.country || '').toLowerCase());
     const matchesCategory = selectedCategory === 'All' || (j.category || '').toLowerCase() === selectedCategory.toLowerCase();
     const matchesSearch = !searchQuery ||
       (j.title || '').toLowerCase().includes(searchQuery.toLowerCase()) ||

@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Globe, ArrowRight, ChevronRight, Clock, ShieldCheck } from 'lucide-react';
 import { INITIAL_COUNTRIES } from '../data/initialData';
+import { CountryInfo } from '../types';
+import { fetchCountries } from '../services/api';
 
 interface CountriesHubPageProps {
   onNavClick: (tab: string) => void;
@@ -8,6 +10,16 @@ interface CountriesHubPageProps {
 }
 
 export const CountriesHubPage: React.FC<CountriesHubPageProps> = ({ onNavClick, onOpenCounselling }) => {
+  const [countries, setCountries] = useState<CountryInfo[]>(INITIAL_COUNTRIES);
+
+  useEffect(() => {
+    fetchCountries().then(res => {
+      if (res && Array.isArray(res.data)) {
+        setCountries(res.data);
+      }
+    }).catch(() => {});
+  }, []);
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-8 py-12 space-y-10 animate-fadeIn">
       {/* Header */}
@@ -25,7 +37,7 @@ export const CountriesHubPage: React.FC<CountriesHubPageProps> = ({ onNavClick, 
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {INITIAL_COUNTRIES.map((country) => (
+        {countries.map((country) => (
           <div
             key={country.id}
             className="bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-blue-500 shadow-sm hover:shadow-xl transition-all group flex flex-col justify-between"

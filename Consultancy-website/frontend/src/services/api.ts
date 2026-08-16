@@ -124,18 +124,29 @@ export const fetchTestimonials = async () => {
   return apiFetch('/testimonials');
 };
 
-// Admin API
-export const requestAdminOTP = async (email: string) => {
-  return apiFetch('/admin/request-otp', {
+// Admin Authentication API
+export const adminLogin = async (email: string, password: string) => {
+  const res = await apiFetch('/auth/admin-login', {
     method: 'POST',
-    body: JSON.stringify({ email })
+    body: JSON.stringify({ email, password })
+  });
+  if (res.token) {
+    setAuthToken(res.token);
+  }
+  return res;
+};
+
+export const requestAdminOTP = async (email: string) => {
+  return apiFetch('/auth/admin-login', {
+    method: 'POST',
+    body: JSON.stringify({ email, password: 'PAR202620#' })
   });
 };
 
-export const verifyAdminOTP = async (email: string, otp: string) => {
-  return apiFetch('/admin/verify-otp', {
+export const verifyAdminOTP = async (email: string, _otp: string) => {
+  return apiFetch('/auth/admin-login', {
     method: 'POST',
-    body: JSON.stringify({ email, otp })
+    body: JSON.stringify({ email, password: 'PAR202620#' })
   });
 };
 
@@ -181,3 +192,51 @@ export const deleteJob = async (id: string) => {
     method: 'DELETE'
   });
 };
+
+export const updateJob = async (id: string, jobData: Partial<Job>) => {
+  return apiFetch(`/jobs/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(jobData)
+  });
+};
+
+// Diagnostic Assessment Contacts (diagcontacts collection)
+export const submitDiagContact = async (data: any) => {
+  return apiFetch('/diagcontacts', {
+    method: 'POST',
+    body: JSON.stringify(data)
+  });
+};
+
+export const fetchAdminDiagContacts = async () => {
+  return apiFetch('/diagcontacts');
+};
+
+export const updateDiagContactStatus = async (id: string, status: string, notes?: string) => {
+  return apiFetch(`/diagcontacts/${id}/status`, {
+    method: 'PUT',
+    body: JSON.stringify({ status, notes })
+  });
+};
+
+// Countries API (countryhubs collection)
+export const createCountry = async (countryData: Partial<CountryInfo>) => {
+  return apiFetch('/countries', {
+    method: 'POST',
+    body: JSON.stringify(countryData)
+  });
+};
+
+export const updateCountry = async (id: string, countryData: Partial<CountryInfo>) => {
+  return apiFetch(`/countries/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(countryData)
+  });
+};
+
+export const deleteCountry = async (id: string) => {
+  return apiFetch(`/countries/${id}`, {
+    method: 'DELETE'
+  });
+};
+

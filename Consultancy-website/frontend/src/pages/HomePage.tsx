@@ -3,6 +3,7 @@ import { ShieldCheck, ArrowRight, Globe, GraduationCap, Briefcase, Users, Search
 import { TrustStandardSection } from '../components/TrustStandardSection';
 import { INITIAL_COUNTRIES, INITIAL_JOBS, INITIAL_BLOGS, INITIAL_TESTIMONIALS } from '../data/initialData';
 import { Job, Testimonial, CountryInfo } from '../types';
+import { fetchJobs, fetchCountries } from '../services/api';
 
 interface HomePageProps {
   onNavClick: (tab: string) => void;
@@ -11,10 +12,27 @@ interface HomePageProps {
 }
 
 export const HomePage: React.FC<HomePageProps> = ({ onNavClick, onOpenCounselling, onSelectJob }) => {
+  const [jobs, setJobs] = useState<Job[]>(INITIAL_JOBS);
+  const [countriesList, setCountriesList] = useState<CountryInfo[]>(INITIAL_COUNTRIES);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCountryFilter, setSelectedCountryFilter] = useState('All');
 
-  const filteredJobs = INITIAL_JOBS.filter(j => {
+  useEffect(() => {
+    const loadDynamicData = async () => {
+      try {
+        const [jRes, cRes] = await Promise.allSettled([fetchJobs(), fetchCountries()]);
+        if (jRes.status === 'fulfilled' && jRes.value?.data?.length > 0) {
+          setJobs(jRes.value.data);
+        }
+        if (cRes.status === 'fulfilled' && cRes.value?.data?.length > 0) {
+          setCountriesList(cRes.value.data);
+        }
+      } catch (e) {}
+    };
+    loadDynamicData();
+  }, []);
+
+  const filteredJobs = jobs.filter(j => {
     const matchesCountry = selectedCountryFilter === 'All' || (j.country || '').toLowerCase() === selectedCountryFilter.toLowerCase();
     const matchesSearch = !searchQuery || (j.title || '').toLowerCase().includes(searchQuery.toLowerCase()) || (j.skills || []).some(s => (s || '').toLowerCase().includes(searchQuery.toLowerCase()));
     return matchesCountry && matchesSearch;
@@ -229,7 +247,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavClick, onOpenCounsellin
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {INITIAL_COUNTRIES.map((country) => (
+            {countriesList.map((country) => (
               <div
                 key={country.id}
                 className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-xl transition-all group flex flex-col justify-between"
