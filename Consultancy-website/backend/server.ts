@@ -10,7 +10,7 @@ import { INITIAL_COUNTRIES, INITIAL_JOBS, INITIAL_BLOGS, INITIAL_NEWS, INITIAL_T
 import { User as UserModel, Job as JobModel, Application as ApplicationModel, Counselling as CounsellingModel, Contact as ContactModel, CountryHub as CountryHubModel, DiagContact as DiagContactModel } from './models.js';
 
 const app = express();
-const PORT = 3000;
+const PORT = Number(process.env.PORT) || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'par_careers_jwt_secret_key_2026';
 
 const DEFAULT_ADMIN_EMAILS = [
@@ -148,7 +148,33 @@ async function seedInitialData() {
 connectToMongo();
 
 // Middleware
-app.use(cors());
+// CORS — allow the Vercel frontend origin in production (no wildcard "*"), and
+// preserve localhost support for local development. Credentials are enabled and
+// the methods/headers the app uses are explicitly allowed so that preflight
+// (OPTIONS) and authenticated requests work correctly.
+const ALLOWED_ORIGINS = [
+  'https://consultancy-website-liard.vercel.app',
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'http://localhost:5000',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:3000',
+  'http://127.0.0.1:5000'
+];
+
+app.use(cors({
+  origin(origin, callback) {
+    // Allow requests without an Origin header (same-origin / server-to-server)
+    // plus the explicitly allow-listed origins.
+    if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error('Origin not allowed by CORS'));
+  },
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
@@ -166,25 +192,37 @@ const createEmailTransporter = () => {
       auth: {
         user: smtpUser,
         pass: smtpPass.trim()
-      }
+      },
+      // Bound the SMTP connection/send so a stalled Gmail connection can never
+      // block (or drop) the HTTP response that is submitting the form.
+      connectionTimeout: 10000,
+      greetingTimeout: 10000,
+      socketTimeout: 15000
     });
   }
   return null;
 };
 
-// Helper function to send notification emails
-const sendAdminNotificationEmail = async (subject: string, htmlContent: string) => {
+// Helper function to send notification emails.
+// This runs in the background and never blocks the request that triggered it,
+// so a slow/unreachable SMTP server cannot hang or fail the form submission.
+const sendAdminNotificationEmail = async (subject: string, htmlContent: string, timeoutMs = 15000) => {
   const transporter = createEmailTransporter();
   const recipient = 'parvisaandcareer94@gmail.com';
 
   if (transporter) {
     try {
-      await transporter.sendMail({
-        from: `"PAR CAREERS Portal" <${process.env.SMTP_USER || 'parvisaandcareer94@gmail.com'}>`,
-        to: recipient,
-        subject: subject,
-        html: htmlContent
-      });
+      await Promise.race([
+        transporter.sendMail({
+          from: `"PAR CAREERS Portal" <${process.env.SMTP_USER || 'parvisaandcareer94@gmail.com'}>`,
+          to: recipient,
+          subject: subject,
+          html: htmlContent
+        }),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error(`Email send timed out after ${timeoutMs}ms`)), timeoutMs)
+        )
+      ]);
       console.log(`[Email Sent] Successfully sent "${subject}" to ${recipient}`);
     } catch (err: any) {
       const errMsg = err?.message || String(err);
@@ -572,7 +610,7 @@ app.post('/api/counselling', async (req: Request, res: Response) => {
       </table>
     `;
 
-    await sendAdminNotificationEmail(`[PAR CAREERS] New Counselling Request - ${fullName}`, htmlContent);
+    void sendAdminNotificationEmail(`[PAR CAREERS] New Counselling Request - ${fullName}`, htmlContent);
 
     res.json({
       success: true,
@@ -667,7 +705,7 @@ app.post('/api/contact', async (req: Request, res: Response) => {
       <blockquote style="background: #f8fafc; padding: 12px; border-left: 4px solid #0284c7;">${message}</blockquote>
     `;
 
-    await sendAdminNotificationEmail(`[PAR CAREERS] Contact Form: ${subject || name}`, htmlContent);
+    void sendAdminNotificationEmail(`[PAR CAREERS] Contact Form: ${subject || name}`, htmlContent);
 
     res.json({
       success: true,
@@ -878,7 +916,7 @@ app.post('/api/applications', async (req: Request, res: Response) => {
       </table>
     `;
 
-    await sendAdminNotificationEmail(`[PAR CAREERS] New Job Application: ${jobTitle} - ${fullName}`, htmlContent);
+    void sendAdminNotificationEmail(`[PAR CAREERS] New Job Application: ${jobTitle} - ${fullName}`, htmlContent);
 
     res.json({
       success: true,
@@ -1379,13 +1417,10 @@ async function startServer() {
       appType: 'spa',
     });
     app.use(vite.middlewares);
-  } else {
-    const distPath = path.join(process.cwd(), 'dist');
-    app.use(express.static(distPath));
-    app.get('*', (_req: Request, res: Response) => {
-      res.sendFile(path.join(distPath, 'index.html'));
-    });
   }
+  // The frontend is deployed separately on Vercel, so the backend no longer
+  // attempts to serve dist/index.html in production. It now acts purely as an
+  // API server while keeping the local Vite dev-server behavior above intact.
 
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`=================================================`);
