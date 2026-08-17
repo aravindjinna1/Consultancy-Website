@@ -1,1 +1,25 @@
 @import "tailwindcss";
+
+/* Scroll-reveal helper: elements start hidden and rise into place one after
+   another (staggered via inline animation-delay) when their section enters
+   the viewport. Pure CSS keyframes run on the browser's compositor thread,
+   so the page never janks or blocks. Replays on re-entry. */
+.reveal-rise {
+  opacity: 0;
+}
+
+.is-revealed .reveal-rise {
+  animation: rise-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes rise-up {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+

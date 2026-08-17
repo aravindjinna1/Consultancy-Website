@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ShieldCheck, Scale, FileText, CheckCircle, HeartHandshake, HelpCircle, PhoneCall, Award } from 'lucide-react';
 
 interface TrustStandardSectionProps {
@@ -7,6 +7,34 @@ interface TrustStandardSectionProps {
 }
 
 export const TrustStandardSection: React.FC<TrustStandardSectionProps> = ({ onOpenCounselling, fullPage = false }) => {
+  // Scroll-reveal for the section header and the trust-promise cards below it
+  // (same smooth rise effect as the "Popular Destinations" cards). Replays
+  // every time each block re-enters the viewport.
+  const trustHeaderRef = useRef<HTMLDivElement>(null);
+  const trustGridRef = useRef<HTMLDivElement>(null);
+  const [headerRevealed, setHeaderRevealed] = useState(false);
+  const [gridRevealed, setGridRevealed] = useState(false);
+
+  useEffect(() => {
+    const headerEl = trustHeaderRef.current;
+    const gridEl = trustGridRef.current;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.target === headerEl) {
+            setHeaderRevealed(entry.isIntersecting);
+          } else if (entry.target === gridEl) {
+            setGridRevealed(entry.isIntersecting);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+    if (headerEl) observer.observe(headerEl);
+    if (gridEl) observer.observe(gridEl);
+    return () => observer.disconnect();
+  }, []);
+
   const trustPromises = [
     {
       title: '100% Transparent Fee Structure',
@@ -54,27 +82,43 @@ export const TrustStandardSection: React.FC<TrustStandardSectionProps> = ({ onOp
     <section className={`py-16 ${fullPage ? 'bg-slate-50' : 'bg-white'} border-y border-slate-100`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-12">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-3">
-          <div className="inline-flex items-center space-x-2 bg-blue-50 text-blue-800 border border-blue-200 text-xs px-3 py-1.5 rounded-full font-bold uppercase tracking-wider">
+        <div
+          ref={trustHeaderRef}
+          className={`text-center max-w-3xl mx-auto space-y-3 ${headerRevealed ? 'is-revealed' : ''}`}
+        >
+          <div
+            className="reveal-rise inline-flex items-center space-x-2 bg-blue-50 text-blue-800 border border-blue-200 text-xs px-3 py-1.5 rounded-full font-bold uppercase tracking-wider"
+            style={{ animationDelay: '0s' }}
+          >
             <ShieldCheck className="w-4 h-4 text-blue-700" />
             <span>The PAR CAREERS Trust Standard</span>
           </div>
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          <h2
+            className="reveal-rise text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
+            style={{ animationDelay: '0.15s' }}
+          >
             Ethical Guidance. Complete Transparency. Unmatched Quality.
           </h2>
-          <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+          <p
+            className="reveal-rise text-slate-600 text-sm sm:text-base leading-relaxed"
+            style={{ animationDelay: '0.3s' }}
+          >
             In an industry often clouded by false promises, PAR CAREERS AND VISA CONSULTANCY SERVICES stands firm on uncompromising ethics, factual clarity, and personalized candidate success.
           </p>
         </div>
 
         {/* 5 Trust Promises Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+          ref={trustGridRef}
+          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ${gridRevealed ? 'is-revealed' : ''}`}
+        >
           {trustPromises.map((p, idx) => {
             const Icon = p.icon;
             return (
               <div
                 key={idx}
-                className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-blue-500 hover:shadow-md transition-all group"
+                className="reveal-rise bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-blue-500 hover:shadow-md transition-all group"
+                style={{ animationDelay: `${idx * 0.14}s` }}
               >
                 <div className="w-12 h-12 bg-blue-50 text-blue-700 rounded-xl flex items-center justify-center mb-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                   <Icon className="w-6 h-6" />
@@ -86,7 +130,10 @@ export const TrustStandardSection: React.FC<TrustStandardSectionProps> = ({ onOp
           })}
 
           {/* Call-to-action Card */}
-          <div className="bg-gradient-to-br from-blue-900 to-sky-800 text-white p-6 rounded-2xl shadow-md flex flex-col justify-between">
+          <div
+            className="reveal-rise bg-gradient-to-br from-blue-900 to-sky-800 text-white p-6 rounded-2xl shadow-md flex flex-col justify-between"
+            style={{ animationDelay: `${trustPromises.length * 0.14}s` }}
+          >
             <div>
               <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center mb-3">
                 <Award className="w-6 h-6 text-sky-300" />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ShieldCheck, ArrowRight, Globe, GraduationCap, Briefcase, Users, Search, CheckCircle2, Star, MessageSquare, ChevronRight, Phone, Sparkles } from 'lucide-react';
 import { TrustStandardSection } from '../components/TrustStandardSection';
 import { ArvioAttribution } from '../components/ArvioAttribution';
@@ -31,6 +31,29 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavClick, onOpenCounsellin
       } catch (e) {}
     };
     loadDynamicData();
+  }, []);
+
+  // Scroll-reveal for the "Popular Destinations" country cards.
+  // A lightweight IntersectionObserver toggles a class on the grid whenever it
+  // enters/leaves the viewport. The animation itself is pure CSS keyframes (run
+  // on the compositor thread), so it never janks or blocks the page. It replays
+  // every time the user scrolls back to the section.
+  const countriesRef = useRef<HTMLDivElement>(null);
+  const [countriesRevealed, setCountriesRevealed] = useState(false);
+
+  useEffect(() => {
+    const el = countriesRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setCountriesRevealed(entry.isIntersecting);
+        });
+      },
+      { threshold: 0.2 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
   const filteredJobs = jobs.filter(j => {
@@ -247,11 +270,15 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavClick, onOpenCounsellin
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {countriesList.map((country) => (
+          <div
+            ref={countriesRef}
+            className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12 ${countriesRevealed ? 'is-revealed' : ''}`}
+          >
+            {countriesList.map((country, index) => (
               <div
                 key={country.id}
-                className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-xl transition-all group flex flex-col justify-between"
+                className="reveal-rise bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-xl transition-all group flex flex-col justify-between"
+                style={{ animationDelay: `${index * 0.14}s` }}
               >
                 <div className="relative h-48 overflow-hidden">
                   <img
