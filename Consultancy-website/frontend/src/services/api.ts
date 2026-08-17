@@ -1,6 +1,16 @@
 import { CounsellingRequest, ContactMessage, Job, JobApplication, Blog, NewsItem, Testimonial, CountryInfo, Referral } from '../types';
 
-const API_BASE = '/api';
+// Centralized backend API base URL.
+// In production the Vercel frontend calls the Render backend directly.
+// In local development (no VITE_API_BASE_URL set) this stays relative ('/api')
+// so the Vite dev-server proxy can forward requests to the local backend.
+// Trailing slashes are stripped so we never produce '//api' or duplicate '/api/api'.
+const API_BASE_URL = (
+  import.meta.env.VITE_API_BASE_URL ||
+  (import.meta.env.DEV ? '' : 'https://consultancy-website-1-878m.onrender.com')
+).replace(/\/+$/, '');
+
+export const API_BASE = `${API_BASE_URL}/api`;
 
 export const getAuthToken = (): string | null => {
   return localStorage.getItem('par_auth_token');

@@ -14,7 +14,8 @@ import {
   createCountry,
   deleteCountry,
   fetchAdminDiagContacts,
-  updateDiagContactStatus
+  updateDiagContactStatus,
+  API_BASE
 } from '../services/api';
 import { CounsellingRequest, JobApplication, ContactMessage, Job, CountryInfo } from '../types';
 import {
@@ -108,7 +109,7 @@ export const AdminDashboardPage: React.FC = () => {
       // Fetch Live Database Status & Config
       try {
         const token = localStorage.getItem('par_auth_token');
-        const dbRes = await fetch('/api/admin/db-status', {
+        const dbRes = await fetch(`${API_BASE}/admin/db-status`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const dbJson = await dbRes.json();
@@ -134,7 +135,7 @@ export const AdminDashboardPage: React.FC = () => {
     setDbNotice(null);
     try {
       const token = localStorage.getItem('par_auth_token');
-      const res = await fetch('/api/admin/update-db-uri', {
+      const res = await fetch(`${API_BASE}/admin/update-db-uri`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -295,7 +296,7 @@ export const AdminDashboardPage: React.FC = () => {
   };
 
   const downloadCSV = (type: string) => {
-    window.open(`/api/admin/export/${type}?token=${token}`, '_blank');
+    window.open(`${API_BASE}/admin/export/${type}?token=${token}`, '_blank');
   };
 
   return (
