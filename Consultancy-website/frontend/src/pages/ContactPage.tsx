@@ -188,7 +188,7 @@ export const ContactPage: React.FC = () => {
               <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Connect via Social Media</div>
               <div className="grid grid-cols-3 gap-2">
                 <a
-                  href="https://instagram.com"
+                  href="https://www.instagram.com/par_career/reels/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-slate-800 hover:bg-slate-700 text-slate-200 p-2.5 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 transition-colors"

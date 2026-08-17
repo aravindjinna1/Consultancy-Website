@@ -59,9 +59,11 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header className="w-full sticky top-0 z-40 bg-white shadow-sm border-b border-slate-100">
       {/* Top Contact Bar */}
-      <div className="bg-slate-900 text-slate-200 text-xs py-2 px-4 sm:px-8 transition-colors">
-        <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
-          <div className="flex items-center space-x-5 flex-wrap gap-y-1">
+      <div className="bg-slate-900 text-slate-200 text-xs py-3 sm:py-2 px-3 sm:px-8 transition-colors">
+        <div className="max-w-7xl mx-auto flex flex-col items-stretch gap-y-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-2">
+          <div className="flex flex-col gap-y-2.5 sm:flex-row sm:items-center sm:space-x-5 sm:flex-wrap sm:gap-y-1">
+            {/* MOBILE ROW 1: Phone + WhatsApp */}
+            <div className="flex items-center justify-between gap-2 sm:justify-start sm:gap-0 sm:space-x-5">
             <a
               href="tel:+918019021039"
               className="flex items-center space-x-1.5 hover:text-sky-400 transition-colors"
@@ -80,21 +82,25 @@ export const Header: React.FC<HeaderProps> = ({
               <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
               <span className="font-medium">WhatsApp: +91 8019021039</span>
             </a>
+            </div>
+
+            {/* MOBILE ROW 2: Email + Social */}
+            <div className="flex items-center justify-between gap-2 sm:justify-start sm:gap-0 sm:space-x-5">
             <a
               href="mailto:parvisaandcareer94@gmail.com"
-              className="hidden md:flex items-center space-x-1.5 hover:text-sky-400 transition-colors"
+              className="flex sm:hidden md:flex items-center space-x-1.5 hover:text-sky-400 transition-colors"
             >
               <Mail className="w-3.5 h-3.5 text-slate-400" />
               <span>parvisaandcareer94@gmail.com</span>
             </a>
 
             {/* Social Media Header Icons */}
-            <div className="flex items-center space-x-3 text-slate-400 pl-2 border-l border-slate-800">
+            <div className="flex items-center gap-4 space-x-5 text-slate-400 sm:pl-2 sm:border-l sm:border-slate-800">
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/par_career/reels/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-pink-400 transition-colors"
+                className="hover:text-pink-400 transition-colors -m-1 p-1"
                 title="Follow us on Instagram"
               >
                 <Instagram className="w-3.5 h-3.5" />
@@ -103,21 +109,22 @@ export const Header: React.FC<HeaderProps> = ({
                 href="https://linkedin.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-sky-400 transition-colors"
+                className="hover:text-sky-400 transition-colors -m-1 p-1"
                 title="Connect with us on LinkedIn"
               >
                 <Linkedin className="w-3.5 h-3.5" />
               </a>
             </div>
+            </div>
           </div>
 
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center justify-between gap-1.5 sm:items-center sm:justify-start sm:gap-0 sm:space-x-3">
             <button
               onClick={() => handleNavClick('trust-standard')}
-              className="hidden lg:flex items-center space-x-1 text-slate-300 hover:text-sky-300 transition-colors"
+              className="flex sm:hidden lg:flex items-center space-x-1 text-slate-300 hover:text-sky-300 transition-colors whitespace-nowrap"
             >
-              <ShieldCheck className="w-3.5 h-3.5 text-sky-400" />
-              <span className="font-semibold tracking-wide">Trust Standard</span>
+              <ShieldCheck className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-sky-400" />
+              <span className="font-semibold tracking-wide text-[11px] sm:text-xs">Trust Standard</span>
             </button>
 
             {user ? (
@@ -141,22 +148,22 @@ export const Header: React.FC<HeaderProps> = ({
                 </button>
               </div>
             ) : (
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1.5 sm:space-x-2">
                 {/* Visible Login Button */}
                 <button
                   onClick={() => handleOpenAuth('login')}
-                  className="flex items-center space-x-1.5 px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-bold border border-slate-700 transition-all shadow-sm hover:border-slate-500"
+                  className="flex items-center space-x-1.5 px-2 sm:px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 text-[11px] sm:text-xs font-bold border border-slate-700 transition-all shadow-sm hover:border-slate-500"
                 >
-                  <LogIn className="w-3.5 h-3.5 text-sky-400" />
+                  <LogIn className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-sky-400" />
                   <span>Login</span>
                 </button>
 
                 {/* Visible Register / Signup Button */}
                 <button
                   onClick={() => handleOpenAuth('signup')}
-                  className="flex items-center space-x-1.5 px-3 py-1 rounded-lg bg-gradient-to-r from-blue-600 to-sky-500 hover:from-blue-700 hover:to-sky-600 text-white text-xs font-bold shadow-md hover:shadow-lg transition-all transform hover:scale-105"
+                  className="flex items-center space-x-1.5 px-2 sm:px-3 py-1 rounded-lg bg-gradient-to-r from-blue-600 to-sky-500 hover:from-blue-700 hover:to-sky-600 text-white text-[11px] sm:text-xs font-bold shadow-md hover:shadow-lg transition-all transform hover:scale-105"
                 >
-                  <UserPlus className="w-3.5 h-3.5" />
+                  <UserPlus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                   <span>Register</span>
                 </button>
 

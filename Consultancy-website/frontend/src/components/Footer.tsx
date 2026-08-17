@@ -80,7 +80,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavClick, onOpenAdminLogin }) 
               <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Connect With Us</div>
               <div className="flex items-center space-x-3">
                 <a
-                  href="https://instagram.com"
+                  href="https://www.instagram.com/par_career/reels/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-300 hover:text-pink-400 hover:border-pink-500/50 transition-colors"

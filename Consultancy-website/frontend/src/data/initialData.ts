@@ -540,7 +540,7 @@ Contact PAR CAREERS AND VISA CONSULTANCY SERVICES (+91 8019021039) to evaluate y
     author: 'PAR Careers Editorial Team',
     date: '2026-08-02',
     readTime: '5 min read',
-    imageUrl: 'https://images.unsplash.com/photo-1527866512907-a35a62a7f6be?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1644172445381-1c545fa752d1?q=80&w=852&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     tags: ['Germany', 'Opportunity Card', 'Work Visa', 'EU Blue Card'],
     isFeatured: true
   },

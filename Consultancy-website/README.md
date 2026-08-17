@@ -66,4 +66,4 @@ The backend API server will start at `http://localhost:5000` (or the configured 
 - `ADMIN_ALLOWLIST`: Comma-separated admin emails
 
 ### Frontend (`Consultancy-website/frontend/.env`)
-- `VITE_API_URL`: Backend API base URL (optional, defaults to `/api` via Vite proxy)
+- `VITE_API_BASE_URL`: Public backend API base URL (e.g. `https://consultancy-website-1-878m.onrender.com`). Always include the full origin (no trailing slash). In production (Vercel) this must point at the Render backend. If unset in local development, the frontend keeps the relative `/api` path and uses the Vite dev-server proxy.

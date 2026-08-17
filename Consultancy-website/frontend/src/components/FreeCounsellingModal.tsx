@@ -66,10 +66,10 @@ export const FreeCounsellingModal: React.FC<FreeCounsellingModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4 overflow-y-auto animate-fadeIn">
-      <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden border border-slate-100 my-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-sm p-3 sm:p-4 overflow-y-auto animate-fadeIn">
+      <div className="relative w-full max-w-2xl flex flex-col max-h-[calc(100dvh-1.5rem)] sm:max-h-none bg-white rounded-2xl shadow-2xl overflow-hidden border border-slate-100 my-0 sm:my-8">
         {/* Modal Header */}
-        <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-sky-700 text-white p-6 sm:p-8 flex justify-between items-start">
+        <div className="shrink-0 bg-gradient-to-r from-blue-900 via-blue-800 to-sky-700 text-white p-6 sm:p-8 flex justify-between items-start">
           <div>
             <div className="inline-flex items-center space-x-1.5 bg-sky-500/20 text-sky-200 border border-sky-400/30 text-xs px-2.5 py-1 rounded-full font-medium mb-2">
               <ShieldCheck className="w-3.5 h-3.5 text-sky-300" />
@@ -81,15 +81,17 @@ export const FreeCounsellingModal: React.FC<FreeCounsellingModalProps> = ({
             </p>
           </div>
           <button
+            type="button"
             onClick={resetAndClose}
-            className="p-1.5 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+            aria-label="Close counselling form"
+            className="shrink-0 p-1.5 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
           >
             <X className="w-6 h-6" />
           </button>
         </div>
 
         {/* Modal Body */}
-        <div className="p-6 sm:p-8">
+        <div className="min-h-0 overflow-y-auto overflow-x-hidden p-6 sm:p-8">
           {success ? (
             <div className="text-center py-8 space-y-4">
               <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-inner">
