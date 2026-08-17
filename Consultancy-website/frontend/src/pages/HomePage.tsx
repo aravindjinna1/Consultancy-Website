@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ShieldCheck, ArrowRight, Globe, GraduationCap, Briefcase, Users, Search, CheckCircle2, Star, MessageSquare, ChevronRight, Phone, Sparkles } from 'lucide-react';
 import { TrustStandardSection } from '../components/TrustStandardSection';
+import { ArvioAttribution } from '../components/ArvioAttribution';
 import { INITIAL_COUNTRIES, INITIAL_JOBS, INITIAL_BLOGS, INITIAL_TESTIMONIALS } from '../data/initialData';
 import { Job, Testimonial, CountryInfo } from '../types';
 import { fetchJobs, fetchCountries } from '../services/api';
@@ -103,7 +104,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavClick, onOpenCounsellin
           <div className="lg:col-span-5 relative">
             <div className="relative rounded-2xl overflow-hidden border border-slate-700/60 shadow-2xl group bg-slate-800">
               <img
-                src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80"
+                src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900&q=80"
                 alt="Student studying on laptop for overseas university admissions & visas"
                 className="w-full h-[380px] sm:h-[440px] object-cover group-hover:scale-105 transition-transform duration-700"
                 referrerPolicy="no-referrer"
@@ -486,6 +487,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavClick, onOpenCounsellin
           </div>
         </div>
       </section>
+
+      {/* 9. Arvio Infotech Agency Attribution & Tech Services */}
+      <ArvioAttribution />
     </div>
   );
 };
