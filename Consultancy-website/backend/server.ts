@@ -153,14 +153,17 @@ connectToMongo();
 // the methods/headers the app uses are explicitly allowed so that preflight
 // (OPTIONS) and authenticated requests work correctly.
 const ALLOWED_ORIGINS = [
-  'https://consultancy-website-liard.vercel.app',
+  'https://par-careers.vercel.app',
   'http://localhost:5173',
   'http://localhost:3000',
   'http://localhost:5000',
   'http://127.0.0.1:5173',
   'http://127.0.0.1:3000',
   'http://127.0.0.1:5000'
+  
 ];
+
+
 
 app.use(cors({
   origin(origin, callback) {
@@ -171,10 +174,12 @@ app.use(cors({
     }
     return callback(new Error('Origin not allowed by CORS'));
   },
+
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
+
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
