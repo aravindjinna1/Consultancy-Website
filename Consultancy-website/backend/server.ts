@@ -154,6 +154,7 @@ connectToMongo();
 // (OPTIONS) and authenticated requests work correctly.
 const ALLOWED_ORIGINS = [
   'https://par-careers.vercel.app',
+  "https://consultancy-website-2rzkxqx5z-aravindjinna1s-projects.vercel.app",
   'http://localhost:5173',
   'http://localhost:3000',
   'http://localhost:5000',
